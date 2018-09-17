@@ -1,0 +1,1068 @@
+<?xml version="1.0" encoding="utf-8"?>
+<stetic-interface>
+  <configuration>
+    <images-root-path>..</images-root-path>
+  </configuration>
+  <import>
+    <widget-library name="../bin/Release/NeuralNetworkClassifier.exe" internal="true" />
+  </import>
+  <widget class="Gtk.Window" id="MainWindow" design-size="801 600">
+    <action-group name="Default">
+      <action id="AboutButton">
+        <property name="Type">Action</property>
+        <property name="Label" translatable="yes" />
+        <property name="StockId">gtk-info</property>
+        <property name="Tooltip" translatable="yes">About Neural Network Classifier</property>
+        <signal name="Activated" handler="OnAboutButtonClicked" />
+      </action>
+      <action id="QuitButton">
+        <property name="Type">Action</property>
+        <property name="Label" translatable="yes" />
+        <property name="StockId">gtk-quit</property>
+        <property name="Tooltip" translatable="yes">Exit Neural Network Classifier</property>
+        <signal name="Activated" handler="OnQuitButtonClicked" />
+      </action>
+      <action id="StartButton">
+        <property name="Type">Action</property>
+        <property name="Label" translatable="yes" />
+        <property name="StockId">gtk-media-play</property>
+        <property name="Tooltip" translatable="yes">Start training neural network classifier</property>
+        <signal name="Activated" handler="OnStartButtonClicked" />
+      </action>
+      <action id="StopButton">
+        <property name="Type">Action</property>
+        <property name="Label" translatable="yes" />
+        <property name="StockId">gtk-media-stop</property>
+        <property name="Tooltip" translatable="yes">Pause training</property>
+        <signal name="Activated" handler="OnStopButtonClicked" />
+      </action>
+      <action id="ResetButton">
+        <property name="Type">Action</property>
+        <property name="Label" translatable="yes" />
+        <property name="StockId">gtk-refresh</property>
+        <property name="Tooltip" translatable="yes">Reset network parameters</property>
+        <signal name="Activated" handler="OnResetButtonClicked" />
+      </action>
+      <action id="ClassifyButton">
+        <property name="Type">Action</property>
+        <property name="Label" translatable="yes" />
+        <property name="StockId">gtk-media-play</property>
+        <property name="Tooltip" translatable="yes">Classify</property>
+        <signal name="Activated" handler="OnClassifyButtonClicked" />
+      </action>
+      <action id="LoadNetworkButton">
+        <property name="Type">Action</property>
+        <property name="Label" translatable="yes" />
+        <property name="StockId">gtk-properties</property>
+        <property name="Tooltip" translatable="yes">Load weights into network</property>
+        <signal name="Activated" handler="OnLoadNetworkButtonClicked" />
+      </action>
+    </action-group>
+    <property name="MemberName" />
+    <property name="WidthRequest">800</property>
+    <property name="HeightRequest">600</property>
+    <property name="Title" translatable="yes">MainWindow</property>
+    <property name="Icon">resource:NeuralNetworkClassifier.network.png</property>
+    <property name="WindowPosition">CenterAlways</property>
+    <property name="Resizable">False</property>
+    <property name="DefaultWidth">800</property>
+    <property name="DefaultHeight">600</property>
+    <signal name="DeleteEvent" handler="OnDeleteEvent" />
+    <child>
+      <widget class="Gtk.Fixed" id="MainLayout">
+        <property name="MemberName" />
+        <property name="WidthRequest">800</property>
+        <property name="HeightRequest">600</property>
+        <property name="HasWindow">False</property>
+        <child>
+          <widget class="Gtk.Toolbar" id="MainToolbar">
+            <property name="MemberName" />
+            <property name="ShowArrow">False</property>
+            <property name="ButtonStyle">Icons</property>
+            <node name="MainToolbar" type="Toolbar">
+              <node type="Toolitem" action="AboutButton" />
+              <node type="Toolitem" action="QuitButton" />
+            </node>
+          </widget>
+          <packing>
+            <property name="X">40</property>
+            <property name="Y">10</property>
+          </packing>
+        </child>
+        <child>
+          <widget class="Gtk.Notebook" id="MainNotebook">
+            <property name="MemberName" />
+            <property name="WidthRequest">720</property>
+            <property name="HeightRequest">490</property>
+            <property name="CanFocus">True</property>
+            <property name="CurrentPage">3</property>
+            <signal name="SwitchPage" handler="OnMainNotebookSwitchPage" />
+            <child>
+              <widget class="Gtk.Fixed" id="LayoutPageData">
+                <property name="MemberName" />
+                <property name="HasWindow">False</property>
+                <child>
+                  <widget class="Gtk.Label" id="LabelTrainingSet">
+                    <property name="MemberName" />
+                    <property name="LabelProp" translatable="yes">&lt;b&gt;Training set&lt;/b&gt;</property>
+                    <property name="UseMarkup">True</property>
+                  </widget>
+                  <packing>
+                    <property name="X">20</property>
+                    <property name="Y">20</property>
+                  </packing>
+                </child>
+                <child>
+                  <widget class="Gtk.Entry" id="TrainingSet">
+                    <property name="MemberName" />
+                    <property name="WidthRequest">400</property>
+                    <property name="IsEditable">False</property>
+                    <property name="InvisibleChar">•</property>
+                  </widget>
+                  <packing>
+                    <property name="X">20</property>
+                    <property name="Y">40</property>
+                  </packing>
+                </child>
+                <child>
+                  <widget class="Gtk.Button" id="OpenTrainingSet">
+                    <property name="MemberName" />
+                    <property name="Tooltip" translatable="yes" />
+                    <property name="CanFocus">True</property>
+                    <property name="Type">TextAndIcon</property>
+                    <property name="Icon">stock:gtk-open Menu</property>
+                    <property name="Label" translatable="yes" />
+                    <property name="FocusOnClick">False</property>
+                    <signal name="Clicked" handler="OnOpenTrainingSetClicked" />
+                  </widget>
+                  <packing>
+                    <property name="X">425</property>
+                    <property name="Y">40</property>
+                  </packing>
+                </child>
+                <child>
+                  <widget class="Gtk.Label" id="LabelTestSet">
+                    <property name="MemberName" />
+                    <property name="LabelProp" translatable="yes">&lt;b&gt;Test set&lt;/b&gt;</property>
+                    <property name="UseMarkup">True</property>
+                  </widget>
+                  <packing>
+                    <property name="X">20</property>
+                    <property name="Y">230</property>
+                  </packing>
+                </child>
+                <child>
+                  <widget class="Gtk.Entry" id="TestSet">
+                    <property name="MemberName" />
+                    <property name="WidthRequest">400</property>
+                    <property name="IsEditable">False</property>
+                    <property name="InvisibleChar">•</property>
+                  </widget>
+                  <packing>
+                    <property name="X">20</property>
+                    <property name="Y">250</property>
+                  </packing>
+                </child>
+                <child>
+                  <widget class="Gtk.Button" id="OpenTestSet">
+                    <property name="MemberName" />
+                    <property name="CanFocus">True</property>
+                    <property name="Type">TextAndIcon</property>
+                    <property name="Icon">stock:gtk-open Menu</property>
+                    <property name="Label" translatable="yes" />
+                    <property name="FocusOnClick">False</property>
+                    <signal name="Clicked" handler="OnOpenTestSetClicked" />
+                  </widget>
+                  <packing>
+                    <property name="X">425</property>
+                    <property name="Y">250</property>
+                  </packing>
+                </child>
+                <child>
+                  <widget class="Gtk.ScrolledWindow" id="WindowTrainingSet">
+                    <property name="MemberName" />
+                    <property name="WidthRequest">400</property>
+                    <property name="HeightRequest">140</property>
+                    <property name="ShadowType">In</property>
+                    <child>
+                      <widget class="Gtk.TextView" id="DataTrainingSet">
+                        <property name="MemberName" />
+                        <property name="CanFocus">True</property>
+                        <property name="ShowScrollbars">True</property>
+                        <property name="AcceptsTab">False</property>
+                        <property name="Text" translatable="yes" />
+                      </widget>
+                    </child>
+                  </widget>
+                  <packing>
+                    <property name="X">20</property>
+                    <property name="Y">80</property>
+                  </packing>
+                </child>
+                <child>
+                  <widget class="Gtk.ScrolledWindow" id="WindowTestSet">
+                    <property name="MemberName" />
+                    <property name="WidthRequest">400</property>
+                    <property name="HeightRequest">140</property>
+                    <property name="ShadowType">In</property>
+                    <child>
+                      <widget class="Gtk.TextView" id="DataTestSet">
+                        <property name="MemberName" />
+                        <property name="CanFocus">True</property>
+                        <property name="ShowScrollbars">True</property>
+                        <property name="Text" translatable="yes" />
+                      </widget>
+                    </child>
+                  </widget>
+                  <packing>
+                    <property name="X">20</property>
+                    <property name="Y">290</property>
+                  </packing>
+                </child>
+                <child>
+                  <widget class="Gtk.Button" id="ReloadTrainingSet">
+                    <property name="MemberName" />
+                    <property name="CanFocus">True</property>
+                    <property name="Type">TextAndIcon</property>
+                    <property name="Icon">stock:gtk-refresh Menu</property>
+                    <property name="Label" translatable="yes" />
+                    <property name="FocusOnClick">False</property>
+                    <signal name="Clicked" handler="OnReloadTrainingSetClicked" />
+                  </widget>
+                  <packing>
+                    <property name="X">460</property>
+                    <property name="Y">40</property>
+                  </packing>
+                </child>
+                <child>
+                  <widget class="Gtk.Button" id="ReloadTestSet">
+                    <property name="MemberName" />
+                    <property name="CanFocus">True</property>
+                    <property name="Type">TextAndIcon</property>
+                    <property name="Icon">stock:gtk-refresh Menu</property>
+                    <property name="Label" translatable="yes" />
+                    <property name="FocusOnClick">False</property>
+                    <signal name="Clicked" handler="OnReloadTestSetClicked" />
+                  </widget>
+                  <packing>
+                    <property name="X">460</property>
+                    <property name="Y">250</property>
+                  </packing>
+                </child>
+                <child>
+                  <widget class="Gtk.Label" id="LabelDelimeter">
+                    <property name="MemberName" />
+                    <property name="LabelProp" translatable="yes">&lt;b&gt;Delimiter&lt;/b&gt;</property>
+                    <property name="UseMarkup">True</property>
+                  </widget>
+                  <packing>
+                    <property name="X">520</property>
+                    <property name="Y">20</property>
+                  </packing>
+                </child>
+                <child>
+                  <widget class="Gtk.ComboBox" id="DelimiterBox">
+                    <property name="MemberName" />
+                    <property name="WidthRequest">150</property>
+                    <property name="IsTextCombo">True</property>
+                    <property name="Items" translatable="yes" />
+                  </widget>
+                  <packing>
+                    <property name="X">520</property>
+                    <property name="Y">40</property>
+                  </packing>
+                </child>
+                <child>
+                  <widget class="Gtk.Label" id="LabelInputNodes">
+                    <property name="MemberName" />
+                    <property name="LabelProp" translatable="yes">&lt;b&gt;# of Input Layer Nodes&lt;/b&gt;</property>
+                    <property name="UseMarkup">True</property>
+                  </widget>
+                  <packing>
+                    <property name="X">520</property>
+                    <property name="Y">80</property>
+                  </packing>
+                </child>
+                <child>
+                  <widget class="Gtk.SpinButton" id="InputLayerNodes">
+                    <property name="MemberName" />
+                    <property name="WidthRequest">150</property>
+                    <property name="Lower">1</property>
+                    <property name="Upper">100</property>
+                    <property name="PageIncrement">10</property>
+                    <property name="StepIncrement">1</property>
+                    <property name="ClimbRate">1</property>
+                    <property name="Numeric">True</property>
+                    <property name="Value">1</property>
+                  </widget>
+                  <packing>
+                    <property name="X">520</property>
+                    <property name="Y">110</property>
+                  </packing>
+                </child>
+                <child>
+                  <widget class="Gtk.Label" id="LabelCategories">
+                    <property name="MemberName" />
+                    <property name="LabelProp" translatable="yes">&lt;b&gt;# of Categories&lt;/b&gt;</property>
+                    <property name="UseMarkup">True</property>
+                  </widget>
+                  <packing>
+                    <property name="X">520</property>
+                    <property name="Y">150</property>
+                  </packing>
+                </child>
+                <child>
+                  <widget class="Gtk.SpinButton" id="Categories">
+                    <property name="MemberName" />
+                    <property name="WidthRequest">150</property>
+                    <property name="Lower">1</property>
+                    <property name="Upper">100</property>
+                    <property name="PageIncrement">10</property>
+                    <property name="StepIncrement">1</property>
+                    <property name="ClimbRate">1</property>
+                    <property name="Numeric">True</property>
+                    <property name="Value">1</property>
+                  </widget>
+                  <packing>
+                    <property name="X">520</property>
+                    <property name="Y">180</property>
+                  </packing>
+                </child>
+                <child>
+                  <widget class="Gtk.Label" id="LabelExamples">
+                    <property name="MemberName" />
+                    <property name="LabelProp" translatable="yes">&lt;b&gt;# of Training examples&lt;/b&gt;</property>
+                    <property name="UseMarkup">True</property>
+                  </widget>
+                  <packing>
+                    <property name="X">520</property>
+                    <property name="Y">220</property>
+                  </packing>
+                </child>
+                <child>
+                  <widget class="Gtk.SpinButton" id="Examples">
+                    <property name="MemberName" />
+                    <property name="WidthRequest">150</property>
+                    <property name="Upper">100000</property>
+                    <property name="PageIncrement">100</property>
+                    <property name="StepIncrement">1</property>
+                    <property name="ClimbRate">1</property>
+                    <property name="Numeric">True</property>
+                  </widget>
+                  <packing>
+                    <property name="X">520</property>
+                    <property name="Y">250</property>
+                  </packing>
+                </child>
+                <child>
+                  <widget class="Gtk.Label" id="LabelSamples">
+                    <property name="MemberName" />
+                    <property name="LabelProp" translatable="yes">&lt;b&gt;# of Test Samples&lt;/b&gt;</property>
+                    <property name="UseMarkup">True</property>
+                  </widget>
+                  <packing>
+                    <property name="X">520</property>
+                    <property name="Y">290</property>
+                  </packing>
+                </child>
+                <child>
+                  <widget class="Gtk.SpinButton" id="Samples">
+                    <property name="MemberName" />
+                    <property name="WidthRequest">150</property>
+                    <property name="Upper">100000</property>
+                    <property name="PageIncrement">100</property>
+                    <property name="StepIncrement">1</property>
+                    <property name="ClimbRate">1</property>
+                    <property name="Numeric">True</property>
+                  </widget>
+                  <packing>
+                    <property name="X">520</property>
+                    <property name="Y">320</property>
+                  </packing>
+                </child>
+              </widget>
+            </child>
+            <child>
+              <widget class="Gtk.Label" id="LabelPageData">
+                <property name="MemberName" />
+                <property name="LabelProp" translatable="yes">Data</property>
+              </widget>
+              <packing>
+                <property name="type">tab</property>
+              </packing>
+            </child>
+            <child>
+              <widget class="Gtk.Fixed" id="LayoutPageTraining">
+                <property name="MemberName" />
+                <property name="HasWindow">False</property>
+                <child>
+                  <widget class="Gtk.Label" id="LabelLearnRate">
+                    <property name="MemberName" />
+                    <property name="LabelProp" translatable="yes">&lt;b&gt;Learning Rate (&amp;#945;) x10&lt;sup&gt;-2&lt;/sup&gt;&lt;/b&gt;</property>
+                    <property name="UseMarkup">True</property>
+                  </widget>
+                  <packing>
+                    <property name="X">20</property>
+                    <property name="Y">20</property>
+                  </packing>
+                </child>
+                <child>
+                  <widget class="Gtk.SpinButton" id="LearningRate">
+                    <property name="MemberName" />
+                    <property name="WidthRequest">150</property>
+                    <property name="Lower">1</property>
+                    <property name="Upper">10000</property>
+                    <property name="PageIncrement">100</property>
+                    <property name="StepIncrement">1</property>
+                    <property name="ClimbRate">1</property>
+                    <property name="Numeric">True</property>
+                    <property name="Value">200</property>
+                  </widget>
+                  <packing>
+                    <property name="X">20</property>
+                    <property name="Y">50</property>
+                  </packing>
+                </child>
+                <child>
+                  <widget class="Gtk.Label" id="LabelHiddenLayerNodes">
+                    <property name="MemberName" />
+                    <property name="LabelProp" translatable="yes">&lt;b&gt;# of Hidden Layer Nodes&lt;/b&gt;</property>
+                    <property name="UseMarkup">True</property>
+                  </widget>
+                  <packing>
+                    <property name="X">20</property>
+                    <property name="Y">90</property>
+                  </packing>
+                </child>
+                <child>
+                  <widget class="Gtk.SpinButton" id="HiddenLayerNodes">
+                    <property name="MemberName" />
+                    <property name="WidthRequest">150</property>
+                    <property name="Lower">1</property>
+                    <property name="Upper">1000</property>
+                    <property name="PageIncrement">10</property>
+                    <property name="StepIncrement">1</property>
+                    <property name="ClimbRate">1</property>
+                    <property name="Numeric">True</property>
+                    <property name="Value">1</property>
+                  </widget>
+                  <packing>
+                    <property name="X">20</property>
+                    <property name="Y">120</property>
+                  </packing>
+                </child>
+                <child>
+                  <widget class="Gtk.Label" id="LabelEpochs">
+                    <property name="MemberName" />
+                    <property name="LabelProp" translatable="yes">&lt;b&gt;# of Iterations (Epochs)&lt;/b&gt;</property>
+                    <property name="UseMarkup">True</property>
+                  </widget>
+                  <packing>
+                    <property name="X">20</property>
+                    <property name="Y">160</property>
+                  </packing>
+                </child>
+                <child>
+                  <widget class="Gtk.SpinButton" id="Epochs">
+                    <property name="MemberName" />
+                    <property name="WidthRequest">150</property>
+                    <property name="Lower">100</property>
+                    <property name="Upper">1000000</property>
+                    <property name="PageIncrement">100</property>
+                    <property name="StepIncrement">1</property>
+                    <property name="ClimbRate">1</property>
+                    <property name="Numeric">True</property>
+                    <property name="Value">1000</property>
+                  </widget>
+                  <packing>
+                    <property name="X">20</property>
+                    <property name="Y">190</property>
+                  </packing>
+                </child>
+                <child>
+                  <widget class="Gtk.Label" id="LabelTraining">
+                    <property name="MemberName" />
+                    <property name="LabelProp" translatable="yes">&lt;b&gt;Train Network&lt;/b&gt;</property>
+                    <property name="UseMarkup">True</property>
+                  </widget>
+                  <packing>
+                    <property name="X">240</property>
+                    <property name="Y">20</property>
+                  </packing>
+                </child>
+                <child>
+                  <widget class="Gtk.ProgressBar" id="TrainingProgress">
+                    <property name="MemberName" />
+                    <property name="WidthRequest">180</property>
+                    <property name="HeightRequest">30</property>
+                  </widget>
+                  <packing>
+                    <property name="X">240</property>
+                    <property name="Y">50</property>
+                  </packing>
+                </child>
+                <child>
+                  <widget class="Gtk.Toolbar" id="TrainingToolbar">
+                    <property name="MemberName" />
+                    <property name="ShowArrow">False</property>
+                    <property name="ButtonStyle">Icons</property>
+                    <node name="TrainingToolbar" type="Toolbar">
+                      <node type="Toolitem" action="StartButton" />
+                      <node type="Toolitem" action="StopButton" />
+                      <node type="Toolitem" action="ResetButton" />
+                    </node>
+                  </widget>
+                  <packing>
+                    <property name="X">240</property>
+                    <property name="Y">90</property>
+                  </packing>
+                </child>
+                <child>
+                  <widget class="Gtk.Label" id="LabelClassification">
+                    <property name="MemberName" />
+                    <property name="LabelProp" translatable="yes">&lt;b&gt;Classification&lt;/b&gt;</property>
+                    <property name="UseMarkup">True</property>
+                  </widget>
+                  <packing>
+                    <property name="X">450</property>
+                    <property name="Y">230</property>
+                  </packing>
+                </child>
+                <child>
+                  <widget class="Gtk.ScrolledWindow" id="ClassificationWindow">
+                    <property name="MemberName" />
+                    <property name="WidthRequest">240</property>
+                    <property name="HeightRequest">140</property>
+                    <property name="ShadowType">In</property>
+                    <child>
+                      <widget class="Gtk.TextView" id="Classification">
+                        <property name="MemberName" />
+                        <property name="WidthRequest">0</property>
+                        <property name="HeightRequest">0</property>
+                        <property name="CanFocus">True</property>
+                        <property name="ShowScrollbars">True</property>
+                        <property name="Editable">False</property>
+                        <property name="Text" translatable="yes" />
+                      </widget>
+                    </child>
+                  </widget>
+                  <packing>
+                    <property name="X">450</property>
+                    <property name="Y">260</property>
+                  </packing>
+                </child>
+                <child>
+                  <widget class="Gtk.Label" id="LabelTolerance">
+                    <property name="MemberName" />
+                    <property name="LabelProp" translatable="yes">&lt;b&gt;Tolerance x10&lt;sup&gt;-5&lt;/sup&gt;&lt;/b&gt;</property>
+                    <property name="UseMarkup">True</property>
+                  </widget>
+                  <packing>
+                    <property name="X">240</property>
+                    <property name="Y">160</property>
+                  </packing>
+                </child>
+                <child>
+                  <widget class="Gtk.SpinButton" id="Tolerance">
+                    <property name="MemberName" />
+                    <property name="WidthRequest">180</property>
+                    <property name="Lower">1</property>
+                    <property name="Upper">10000</property>
+                    <property name="PageIncrement">100</property>
+                    <property name="StepIncrement">1</property>
+                    <property name="ClimbRate">1</property>
+                    <property name="Numeric">True</property>
+                    <property name="Value">1</property>
+                  </widget>
+                  <packing>
+                    <property name="X">240</property>
+                    <property name="Y">190</property>
+                  </packing>
+                </child>
+                <child>
+                  <widget class="Gtk.Label" id="LabelIterations">
+                    <property name="MemberName" />
+                    <property name="LabelProp" translatable="yes">&lt;b&gt;Iterations&lt;/b&gt;</property>
+                    <property name="UseMarkup">True</property>
+                  </widget>
+                  <packing>
+                    <property name="X">450</property>
+                    <property name="Y">90</property>
+                  </packing>
+                </child>
+                <child>
+                  <widget class="Gtk.Entry" id="Iterations">
+                    <property name="MemberName" />
+                    <property name="WidthRequest">150</property>
+                    <property name="IsEditable">False</property>
+                    <property name="InvisibleChar">•</property>
+                  </widget>
+                  <packing>
+                    <property name="X">450</property>
+                    <property name="Y">120</property>
+                  </packing>
+                </child>
+                <child>
+                  <widget class="Gtk.Label" id="LabelErrorCost">
+                    <property name="MemberName" />
+                    <property name="LabelProp" translatable="yes">&lt;b&gt;Error/Cost function&lt;/b&gt;</property>
+                    <property name="UseMarkup">True</property>
+                  </widget>
+                  <packing>
+                    <property name="X">450</property>
+                    <property name="Y">20</property>
+                  </packing>
+                </child>
+                <child>
+                  <widget class="Gtk.Entry" id="ErrorCost">
+                    <property name="MemberName" />
+                    <property name="WidthRequest">150</property>
+                    <property name="IsEditable">False</property>
+                    <property name="InvisibleChar">•</property>
+                  </widget>
+                  <packing>
+                    <property name="X">450</property>
+                    <property name="Y">50</property>
+                  </packing>
+                </child>
+                <child>
+                  <widget class="Gtk.Toolbar" id="ClassifyToolbar">
+                    <property name="MemberName" />
+                    <property name="ShowArrow">False</property>
+                    <property name="ButtonStyle">Icons</property>
+                    <node name="ClassifyToolbar" type="Toolbar">
+                      <node type="Toolitem" action="ClassifyButton" />
+                    </node>
+                  </widget>
+                  <packing>
+                    <property name="X">20</property>
+                    <property name="Y">410</property>
+                  </packing>
+                </child>
+                <child>
+                  <widget class="Gtk.Label" id="LabelThreshold">
+                    <property name="MemberName" />
+                    <property name="LabelProp" translatable="yes">&lt;b&gt;Classification Threshold&lt;/b&gt;</property>
+                    <property name="UseMarkup">True</property>
+                  </widget>
+                  <packing>
+                    <property name="X">453</property>
+                    <property name="Y">162</property>
+                  </packing>
+                </child>
+                <child>
+                  <widget class="Gtk.SpinButton" id="Threshold">
+                    <property name="MemberName" />
+                    <property name="WidthRequest">150</property>
+                    <property name="CanFocus">True</property>
+                    <property name="Lower">1</property>
+                    <property name="Upper">100</property>
+                    <property name="PageIncrement">1</property>
+                    <property name="StepIncrement">1</property>
+                    <property name="ClimbRate">1</property>
+                    <property name="Numeric">True</property>
+                    <property name="Value">50</property>
+                  </widget>
+                  <packing>
+                    <property name="X">450</property>
+                    <property name="Y">190</property>
+                  </packing>
+                </child>
+                <child>
+                  <widget class="Gtk.Label" id="LabelClassify">
+                    <property name="MemberName" />
+                    <property name="LabelProp" translatable="yes">&lt;b&gt;Classify&lt;/b&gt;</property>
+                    <property name="UseMarkup">True</property>
+                  </widget>
+                  <packing>
+                    <property name="X">70</property>
+                    <property name="Y">420</property>
+                  </packing>
+                </child>
+              </widget>
+              <packing>
+                <property name="Position">1</property>
+              </packing>
+            </child>
+            <child>
+              <widget class="Gtk.Label" id="LabelPageTraining">
+                <property name="MemberName" />
+                <property name="LabelProp" translatable="yes">Training</property>
+              </widget>
+              <packing>
+                <property name="type">tab</property>
+              </packing>
+            </child>
+            <child>
+              <widget class="Gtk.Fixed" id="LayoutPageNetwork">
+                <property name="MemberName" />
+                <property name="HasWindow">False</property>
+                <child>
+                  <widget class="Gtk.Label" id="LabelWJI">
+                    <property name="MemberName" />
+                    <property name="LabelProp" translatable="yes">&lt;b&gt;Input Layer Weights&lt;/b&gt;</property>
+                    <property name="UseMarkup">True</property>
+                  </widget>
+                  <packing>
+                    <property name="X">20</property>
+                    <property name="Y">20</property>
+                  </packing>
+                </child>
+                <child>
+                  <widget class="Gtk.ScrolledWindow" id="WJIWindow">
+                    <property name="MemberName" />
+                    <property name="WidthRequest">300</property>
+                    <property name="HeightRequest">140</property>
+                    <property name="ShadowType">In</property>
+                    <child>
+                      <widget class="Gtk.TextView" id="WJIView">
+                        <property name="MemberName" />
+                        <property name="CanFocus">True</property>
+                        <property name="ShowScrollbars">True</property>
+                        <property name="Editable">False</property>
+                        <property name="Text" translatable="yes" />
+                      </widget>
+                    </child>
+                  </widget>
+                  <packing>
+                    <property name="X">20</property>
+                    <property name="Y">80</property>
+                  </packing>
+                </child>
+                <child>
+                  <widget class="Gtk.Entry" id="WJIFile">
+                    <property name="MemberName" />
+                    <property name="WidthRequest">230</property>
+                    <property name="IsEditable">True</property>
+                    <property name="InvisibleChar">•</property>
+                  </widget>
+                  <packing>
+                    <property name="X">20</property>
+                    <property name="Y">40</property>
+                  </packing>
+                </child>
+                <child>
+                  <widget class="Gtk.Button" id="OpenWJIButton">
+                    <property name="MemberName" />
+                    <property name="Type">TextAndIcon</property>
+                    <property name="Icon">stock:gtk-open Menu</property>
+                    <property name="Label" translatable="yes" />
+                    <property name="FocusOnClick">False</property>
+                    <signal name="Clicked" handler="OnOpenWJIButtonClicked" />
+                  </widget>
+                  <packing>
+                    <property name="X">260</property>
+                    <property name="Y">40</property>
+                  </packing>
+                </child>
+                <child>
+                  <widget class="Gtk.Button" id="SaveWJIButton">
+                    <property name="MemberName" />
+                    <property name="Type">TextAndIcon</property>
+                    <property name="Icon">stock:gtk-save Menu</property>
+                    <property name="Label" translatable="yes" />
+                    <property name="FocusOnClick">False</property>
+                    <signal name="Clicked" handler="OnSaveWJIButtonClicked" />
+                  </widget>
+                  <packing>
+                    <property name="X">290</property>
+                    <property name="Y">40</property>
+                  </packing>
+                </child>
+                <child>
+                  <widget class="Gtk.ScrolledWindow" id="WKJWindow">
+                    <property name="MemberName" />
+                    <property name="WidthRequest">300</property>
+                    <property name="HeightRequest">140</property>
+                    <property name="ShadowType">In</property>
+                    <child>
+                      <widget class="Gtk.TextView" id="WKJView">
+                        <property name="MemberName" />
+                        <property name="CanFocus">True</property>
+                        <property name="ShowScrollbars">True</property>
+                        <property name="Editable">False</property>
+                        <property name="Text" translatable="yes" />
+                      </widget>
+                    </child>
+                  </widget>
+                  <packing>
+                    <property name="X">370</property>
+                    <property name="Y">80</property>
+                  </packing>
+                </child>
+                <child>
+                  <widget class="Gtk.Entry" id="WKJFile">
+                    <property name="MemberName" />
+                    <property name="WidthRequest">230</property>
+                    <property name="IsEditable">True</property>
+                    <property name="InvisibleChar">•</property>
+                  </widget>
+                  <packing>
+                    <property name="X">370</property>
+                    <property name="Y">40</property>
+                  </packing>
+                </child>
+                <child>
+                  <widget class="Gtk.Button" id="OpenWKJButton">
+                    <property name="MemberName" />
+                    <property name="Type">TextAndIcon</property>
+                    <property name="Icon">stock:gtk-open Menu</property>
+                    <property name="Label" translatable="yes" />
+                    <property name="FocusOnClick">False</property>
+                    <signal name="Clicked" handler="OnOpenWKJButtonClicked" />
+                  </widget>
+                  <packing>
+                    <property name="X">610</property>
+                    <property name="Y">40</property>
+                  </packing>
+                </child>
+                <child>
+                  <widget class="Gtk.Button" id="SaveWKJButton">
+                    <property name="MemberName" />
+                    <property name="Type">TextAndIcon</property>
+                    <property name="Icon">stock:gtk-save Menu</property>
+                    <property name="Label" translatable="yes" />
+                    <property name="FocusOnClick">False</property>
+                    <signal name="Clicked" handler="OnSaveWKJButtonClicked" />
+                  </widget>
+                  <packing>
+                    <property name="X">640</property>
+                    <property name="Y">40</property>
+                  </packing>
+                </child>
+                <child>
+                  <widget class="Gtk.Label" id="LabelWKJ">
+                    <property name="MemberName" />
+                    <property name="LabelProp" translatable="yes">&lt;b&gt;Hidden Layer Nodes&lt;/b&gt;</property>
+                    <property name="UseMarkup">True</property>
+                  </widget>
+                  <packing>
+                    <property name="X">370</property>
+                    <property name="Y">20</property>
+                  </packing>
+                </child>
+                <child>
+                  <widget class="Gtk.Toolbar" id="LoadNetworkToolbar">
+                    <property name="MemberName" />
+                    <property name="ShowArrow">False</property>
+                    <node name="LoadNetworkToolbar" type="Toolbar">
+                      <node type="Toolitem" action="LoadNetworkButton" />
+                    </node>
+                  </widget>
+                  <packing>
+                    <property name="X">20</property>
+                    <property name="Y">410</property>
+                  </packing>
+                </child>
+                <child>
+                  <widget class="Gtk.Label" id="LabelLoadNetwork">
+                    <property name="MemberName" />
+                    <property name="LabelProp" translatable="yes">&lt;b&gt;Load weights into network&lt;/b&gt;</property>
+                    <property name="UseMarkup">True</property>
+                  </widget>
+                  <packing>
+                    <property name="X">70</property>
+                    <property name="Y">420</property>
+                  </packing>
+                </child>
+                <child>
+                  <widget class="Gtk.Label" id="LabelNormalization">
+                    <property name="MemberName" />
+                    <property name="LabelProp" translatable="yes">&lt;b&gt;Normalization&lt;/b&gt;</property>
+                    <property name="UseMarkup">True</property>
+                  </widget>
+                  <packing>
+                    <property name="X">20</property>
+                    <property name="Y">233</property>
+                  </packing>
+                </child>
+                <child>
+                  <widget class="Gtk.Entry" id="NormalizationFile">
+                    <property name="MemberName" />
+                    <property name="WidthRequest">230</property>
+                    <property name="CanFocus">True</property>
+                    <property name="IsEditable">True</property>
+                    <property name="InvisibleChar">•</property>
+                  </widget>
+                  <packing>
+                    <property name="X">20</property>
+                    <property name="Y">250</property>
+                  </packing>
+                </child>
+                <child>
+                  <widget class="Gtk.ScrolledWindow" id="NormalizationWindow">
+                    <property name="MemberName" />
+                    <property name="WidthRequest">300</property>
+                    <property name="HeightRequest">80</property>
+                    <property name="ShadowType">In</property>
+                    <child>
+                      <widget class="Gtk.TextView" id="Normalization">
+                        <property name="MemberName" />
+                        <property name="CanFocus">True</property>
+                        <property name="ShowScrollbars">True</property>
+                        <property name="Editable">False</property>
+                        <property name="Text" translatable="yes" />
+                      </widget>
+                    </child>
+                  </widget>
+                  <packing>
+                    <property name="X">21</property>
+                    <property name="Y">285</property>
+                  </packing>
+                </child>
+                <child>
+                  <widget class="Gtk.Button" id="OpenNormalization">
+                    <property name="MemberName" />
+                    <property name="Type">TextAndIcon</property>
+                    <property name="Icon">stock:gtk-open Menu</property>
+                    <property name="Label" translatable="yes" />
+                    <property name="FocusOnClick">False</property>
+                    <signal name="Clicked" handler="OnOpenNormalizationClicked" />
+                  </widget>
+                  <packing>
+                    <property name="X">260</property>
+                    <property name="Y">250</property>
+                  </packing>
+                </child>
+                <child>
+                  <widget class="Gtk.Button" id="SaveNormalization">
+                    <property name="MemberName" />
+                    <property name="Type">TextAndIcon</property>
+                    <property name="Icon">stock:gtk-save Menu</property>
+                    <property name="Label" translatable="yes" />
+                    <property name="FocusOnClick">False</property>
+                    <signal name="Clicked" handler="OnSaveNormalizationClicked" />
+                  </widget>
+                  <packing>
+                    <property name="X">290</property>
+                    <property name="Y">250</property>
+                  </packing>
+                </child>
+              </widget>
+              <packing>
+                <property name="Position">2</property>
+              </packing>
+            </child>
+            <child>
+              <widget class="Gtk.Label" id="LabelPageNetwork">
+                <property name="MemberName" />
+                <property name="LabelProp" translatable="yes">Network</property>
+              </widget>
+              <packing>
+                <property name="type">tab</property>
+              </packing>
+            </child>
+            <child>
+              <widget class="Gtk.Fixed" id="LayoutPageAbout">
+                <property name="MemberName" />
+                <property name="HasWindow">False</property>
+                <child>
+                  <widget class="Gtk.Image" id="ANNArchitecture">
+                    <property name="MemberName" />
+                    <property name="Pixbuf">resource:NeuralNetworkClassifier.ann.png</property>
+                  </widget>
+                  <packing>
+                    <property name="X">20</property>
+                    <property name="Y">20</property>
+                  </packing>
+                </child>
+                <child>
+                  <widget class="Gtk.ScrolledWindow" id="CreditsWindow">
+                    <property name="MemberName" />
+                    <property name="WidthRequest">220</property>
+                    <property name="HeightRequest">110</property>
+                    <property name="ShadowType">In</property>
+                    <child>
+                      <widget class="Gtk.TextView" id="Credits">
+                        <property name="MemberName" />
+                        <property name="ShowScrollbars">True</property>
+                        <property name="Editable">False</property>
+                        <property name="Text" translatable="yes">Icons made by Becris from www.flaticon.com is licensed by Creative Commons BY 3.0</property>
+                        <property name="WrapMode">Word</property>
+                      </widget>
+                    </child>
+                  </widget>
+                  <packing>
+                    <property name="X">480</property>
+                    <property name="Y">280</property>
+                  </packing>
+                </child>
+                <child>
+                  <widget class="Gtk.Label" id="LabelCredits">
+                    <property name="MemberName" />
+                    <property name="LabelProp" translatable="yes">&lt;b&gt;Credits&lt;/b&gt;</property>
+                    <property name="UseMarkup">True</property>
+                  </widget>
+                  <packing>
+                    <property name="X">480</property>
+                    <property name="Y">250</property>
+                  </packing>
+                </child>
+                <child>
+                  <widget class="Gtk.Label" id="LabelAbout">
+                    <property name="MemberName" />
+                    <property name="LabelProp" translatable="yes">&lt;b&gt;Neural Network Classifier&lt;/b&gt;</property>
+                    <property name="UseMarkup">True</property>
+                  </widget>
+                  <packing>
+                    <property name="X">480</property>
+                    <property name="Y">20</property>
+                  </packing>
+                </child>
+                <child>
+                  <widget class="Gtk.ScrolledWindow" id="AboutWindow">
+                    <property name="MemberName" />
+                    <property name="WidthRequest">220</property>
+                    <property name="HeightRequest">180</property>
+                    <property name="ShadowType">In</property>
+                    <child>
+                      <widget class="Gtk.TextView" id="textview2">
+                        <property name="MemberName" />
+                        <property name="ShowScrollbars">True</property>
+                        <property name="Editable">False</property>
+                        <property name="Text" translatable="yes">Neural Network Classifier (NNC) software utilizes a simple 3 layer artificial neural network (ANN) architecture composed of the input layer, hidden layer, and the output layer. The simplicity of the architecture implies that NNC may not qualify as 'Deep Learning' but unsurprisingly, it can be used to classify a wide range of data sets.
+
+Two sets of weights are "trained":  1) connection strengths between the input and hidden layer nodes, and the 2) connection strengths  between the hidden layer and output layer. The bias nodes have a fixed value of 1.0.
+
+Finally, NNC can perform multi-category classification and some data sets are included in the NNC bundle for testing purposes.
+
+More data sets are available at:
+
+P. Fränti and S. Sieranoja
+Applied Intelligence, 1-17, 2018
+https://doi.org/10.1007/s10489-018-1238-7
+
+http://cs.joensuu.fi/sipu/datasets/</property>
+                        <property name="WrapMode">Word</property>
+                      </widget>
+                    </child>
+                  </widget>
+                  <packing>
+                    <property name="X">480</property>
+                    <property name="Y">50</property>
+                  </packing>
+                </child>
+              </widget>
+              <packing>
+                <property name="Position">3</property>
+              </packing>
+            </child>
+            <child>
+              <widget class="Gtk.Label" id="LabelPageAbout">
+                <property name="MemberName" />
+                <property name="LabelProp" translatable="yes">About</property>
+              </widget>
+              <packing>
+                <property name="type">tab</property>
+              </packing>
+            </child>
+          </widget>
+          <packing>
+            <property name="X">40</property>
+            <property name="Y">70</property>
+          </packing>
+        </child>
+      </widget>
+    </child>
+  </widget>
+</stetic-interface>
