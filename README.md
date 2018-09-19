@@ -1,4 +1,4 @@
-# NeuralNetworkClassifier
+# Neural Network Classifier
 The GTK-based no-programming-required simple neural network classifier software for Win/Unix/Linux/OSX platforms
 
 **About Page**
