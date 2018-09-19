@@ -7,11 +7,8 @@ public class FuncOutput
 
 	public FuncOutput(double error, double[] X)
 	{
-		Gradient = new double[X.Length];
+		Gradient = X;
 		Error = error;
-
-		for (int i = 0; i < X.Length; i++)
-		    Gradient[i] = X[i];
 	}
 }
 
@@ -57,19 +54,19 @@ public class Optimize
 	double z1;
 
 	double Multiply(double[] a, double[] b)
-    {
-        if (a.Length == b.Length)
-        {
-            var dot = 0.0;
+	{
+		if (a.Length == b.Length)
+		{
+			var dot = 0.0;
 
-            for (var i = 0; i < a.Length; i++)
-                dot += a[i] * b[i];
+			for (var i = 0; i < a.Length; i++)
+				dot += a[i] * b[i];
 
-            return dot;
-        }
+			return dot;
+		}
 
-        return 0.0;
-    }
+		return 0.0;
+	}
 
 	public void Setup(Func<double[], FuncOutput> F, ref double[] X)
 	{
@@ -316,7 +313,7 @@ public class Optimize
 			// end of line search
 		}
 
-        // if line searched succeeded 
+		// if line searched succeeded 
 		if (success)
 		{
 			f1 = f2;
@@ -356,7 +353,7 @@ public class Optimize
 			d1 = d2;
 
 			// this line search did not fail
-			ls_failed = false; 
+			ls_failed = false;
 		}
 		else
 		{
@@ -373,7 +370,7 @@ public class Optimize
 			if (ls_failed || iteration > Math.Abs(length))
 			{
 				// or we ran out of time, so we give up
-				return true; 
+				return true;
 			}
 
 			// swap derivatives

@@ -15,7 +15,7 @@ public partial class MainWindow : Gtk.Window
     FileChooserDialog TextSaver, TextLoader;
     String TrainingSetFileName, TestSetFileName;
     String WJIFileName, WKJFileName, NormalizationFileName;
-    
+
     List<Delimiter> Delimiters = new List<Delimiter>();
 
     bool Paused = true;
@@ -293,7 +293,7 @@ public partial class MainWindow : Gtk.Window
     protected void LoadNetworkData(ref string FileName, string title, TextView view, Entry entry, ref int x, ref int y)
     {
         TextLoader.Title = title;
-        
+
         // Add most recent directory
         if (!string.IsNullOrEmpty(TextLoader.Filename))
         {
@@ -367,7 +367,7 @@ public partial class MainWindow : Gtk.Window
 		string directory;
 
         // Add most recent directory
-		if (!string.IsNullOrEmpty(TextSaver.Filename))
+        if (!string.IsNullOrEmpty(TextSaver.Filename))
         {
 			directory = System.IO.Path.GetDirectoryName(TextSaver.Filename);
 
@@ -414,7 +414,7 @@ public partial class MainWindow : Gtk.Window
 
 		TextSaver.Hide();
 	}
-    
+
     protected void UpdateDelimiterBox(ComboBox combo, List<Delimiter> delimeters)
     {
         combo.Clear();
@@ -461,7 +461,7 @@ public partial class MainWindow : Gtk.Window
             ErrorCost.Text = Network.L2.ToString("0.#####e+00", ci);
         }
     }
-    
+
     protected void UpdateProgressBar()
     {
         if (Epochs.Value > 0)
@@ -673,8 +673,8 @@ public partial class MainWindow : Gtk.Window
 		}
 		else
 		{
-            Network.Setup(OutputData, Options);	
-		}
+            Network.Setup(OutputData, Options);
+        }
 
         DataTrainingSet.Buffer.Text = training;
     }
@@ -840,7 +840,7 @@ public partial class MainWindow : Gtk.Window
 		if (string.IsNullOrEmpty(inputLayer) || string.IsNullOrEmpty(hiddenLayer) || string.IsNullOrEmpty(normalization))
 			return;
 
-		// Reset Network
+        // Reset Network
         Network.Free();
 
         Options.Alpha = Convert.ToDouble(LearningRate.Value) / 1.0e2;
@@ -904,8 +904,8 @@ public partial class MainWindow : Gtk.Window
 			{
                 if (y > 0)
                     text += "\n";
-                
-				for (int x = 0; x < data.x; x++)
+
+                for (int x = 0; x < data.x; x++)
 				{
 					if (x > 0)
 						text += delimiter;
@@ -1158,8 +1158,8 @@ public partial class MainWindow : Gtk.Window
 
 		if (y > 0)
 			HiddenLayerNodes.Value = y;
-		
-		Console.WriteLine("Input Layer Weights: Loaded {0}x{1} values", x, y);
+
+        Console.WriteLine("Input Layer Weights: Loaded {0}x{1} values", x, y);
 	}
 
 	protected void OnOpenWKJButtonClicked(object sender, EventArgs e)
@@ -1177,8 +1177,8 @@ public partial class MainWindow : Gtk.Window
 
         if (y > 0)
 			Categories.Value = y;
-		
-		Console.WriteLine("Hidden Layer Weights: Loaded {0}x{1} values", x, y);
+
+        Console.WriteLine("Hidden Layer Weights: Loaded {0}x{1} values", x, y);
 	}
 
 	protected void OnOpenNormalizationClicked(object sender, EventArgs e)
@@ -1201,8 +1201,8 @@ public partial class MainWindow : Gtk.Window
 	{
 		if (!Paused)
 			return;
-		
-		if (NetworkSetuped)
+
+        if (NetworkSetuped)
 		{
 			SaveTextFile(ref WJIFileName, "Save Input Layer Weights", WJIFile, Network.Wji);
 		}

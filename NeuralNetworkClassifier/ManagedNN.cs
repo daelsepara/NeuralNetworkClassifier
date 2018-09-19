@@ -113,7 +113,7 @@ namespace DeepLearnCS
 			for (int i = 0; i < Y_output.Length(); i++)
 			{
 				L2 += Math.Sqrt(D3[i] * D3[i]);
-                Cost += (-Y_output[i] * Math.Log(Yk[i]) - (1.0 - Y_output[i]) * Math.Log(1.0 - Yk[i]));
+				Cost += (-Y_output[i] * Math.Log(Yk[i]) - (1.0 - Y_output[i]) * Math.Log(1.0 - Yk[i]));
 			}
 
 			// cost = cost / m
@@ -295,14 +295,7 @@ namespace DeepLearnCS
 
 			OptimizerInput = null;
 
-			var result = (double.IsNaN(Cost) || Iterations >= opts.Epochs || Cost < opts.Tolerance);
-
-            if (result)
-			{
-				ManagedOps.Free(DeltaWji, DeltaWkj);
-			}
-
-			return result;
+			return (double.IsNaN(Cost) || Iterations >= opts.Epochs || Cost < opts.Tolerance);
 		}
 
 		ManagedArray OptimizerInput;
@@ -317,12 +310,14 @@ namespace DeepLearnCS
 			if (OptimizerInput != null)
 				BackPropagation(OptimizerInput);
 
-            X = ReshapeWeights(DeltaWji, DeltaWkj);
+			X = ReshapeWeights(DeltaWji, DeltaWkj);
+
+			ManagedOps.Free(DeltaWji, DeltaWkj);
 
 			return new FuncOutput(Cost, X);
 		}
 
-        // Reshape Network Weights for use in optimizer
+		// Reshape Network Weights for use in optimizer
 		public double[] ReshapeWeights(ManagedArray A, ManagedArray B)
 		{
 			var X = new double[A.x * A.y + B.x * B.y];
@@ -340,45 +335,45 @@ namespace DeepLearnCS
 			}
 
 			for (var x = 0; x < B.x; x++)
-            {
+			{
 				for (var y = 0; y < B.y; y++)
-                {
+				{
 					X[index] = B[x, y];
 
-                    index++;
-                }
-            }
+					index++;
+				}
+			}
 
 			return X;
 		}
 
 		// Reshape Network Weights for use in optimizer
 		public void RecoverWeights(double[] X, ManagedArray A, ManagedArray B)
-        {
-            var index = 0;
+		{
+			var index = 0;
 
-            for (var x = 0; x < A.x; x++)
-            {
-                for (var y = 0; y < A.y; y++)
-                {
+			for (var x = 0; x < A.x; x++)
+			{
+				for (var y = 0; y < A.y; y++)
+				{
 					if (index < X.Length)
 						A[x, y] = X[index];
 
-                    index++;
-                }
-            }
+					index++;
+				}
+			}
 
-            for (var x = 0; x < B.x; x++)
-            {
-                for (var y = 0; y < B.y; y++)
-                {
+			for (var x = 0; x < B.x; x++)
+			{
+				for (var y = 0; y < B.y; y++)
+				{
 					if (index < X.Length)
 						B[x, y] = X[index];
 
-                    index++;
-                }
-            }
-        }
+					index++;
+				}
+			}
+		}
 
 		public void LoadInputLayerWeights(string BaseDirectory, string BaseFileName, int sizex, int sizey)
 		{
