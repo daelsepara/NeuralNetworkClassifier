@@ -239,7 +239,7 @@ public partial class MainWindow
 		this.MainNotebook.HeightRequest = 490;
 		this.MainNotebook.CanFocus = true;
 		this.MainNotebook.Name = "MainNotebook";
-		this.MainNotebook.CurrentPage = 1;
+		this.MainNotebook.CurrentPage = 3;
 		// Container child MainNotebook.Gtk.Notebook+NotebookChild
 		this.LayoutPageData = new global::Gtk.Fixed();
 		this.LayoutPageData.Name = "LayoutPageData";
@@ -936,8 +936,11 @@ public partial class MainWindow
 		this.CreditsWindow.ShadowType = ((global::Gtk.ShadowType)(1));
 		// Container child CreditsWindow.Gtk.Container+ContainerChild
 		this.Credits = new global::Gtk.TextView();
-		this.Credits.Buffer.Text = global::Mono.Unix.Catalog.GetString("Icons made by Becris from www.flaticon.com is licensed by Creative Commons BY 3.0" +
-				"");
+		this.Credits.Buffer.Text = global::Mono.Unix.Catalog.GetString(@"Icons made by Becris from www.flaticon.com is licensed by Creative Commons BY 3.0
+
+Original fmincg (Optimizer) implementation by (C) Copyright 1999, 2000 & 2001, Carl Edward Rasmussen
+
+C# implementation by Peter Sergio Larsen with minor modifications by Stephen Daedalus Separa (2018)  ");
 		this.Credits.Name = "Credits";
 		this.Credits.Editable = false;
 		this.Credits.WrapMode = ((global::Gtk.WrapMode)(2));

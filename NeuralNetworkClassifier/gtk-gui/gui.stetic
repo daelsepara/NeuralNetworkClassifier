@@ -95,7 +95,7 @@
             <property name="WidthRequest">720</property>
             <property name="HeightRequest">490</property>
             <property name="CanFocus">True</property>
-            <property name="CurrentPage">1</property>
+            <property name="CurrentPage">2</property>
             <signal name="SwitchPage" handler="OnMainNotebookSwitchPage" />
             <child>
               <widget class="Gtk.Fixed" id="LayoutPageData">
@@ -991,7 +991,11 @@
                         <property name="MemberName" />
                         <property name="ShowScrollbars">True</property>
                         <property name="Editable">False</property>
-                        <property name="Text" translatable="yes">Icons made by Becris from www.flaticon.com is licensed by Creative Commons BY 3.0</property>
+                        <property name="Text" translatable="yes">Icons made by Becris from www.flaticon.com is licensed by Creative Commons BY 3.0
+
+Original fmincg (Optimizer) implementation by (C) Copyright 1999, 2000 &amp; 2001, Carl Edward Rasmussen
+
+C# implementation by Peter Sergio Larsen with minor modifications by Stephen Daedalus Separa (2018)  </property>
                         <property name="WrapMode">Word</property>
                       </widget>
                     </child>
