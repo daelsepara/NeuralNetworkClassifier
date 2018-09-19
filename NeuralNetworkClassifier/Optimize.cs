@@ -35,7 +35,7 @@ public class FuncOutput
 // and "i" the number of iterations (line searches or function evaluations,
 // depending on the sign of "length") used.
 //
-// Usage: [X, fX, i] = fmincg(f, X, options, P1, P2, P3, P4, P5, P6, P7)
+// Usage: [X, fX, i] = fmincg(f, X, options)
 //
 // See also: checkgrad 
 //
@@ -55,7 +55,7 @@ public class FuncOutput
 // advisable in any important application.  All use of these programs is
 // entirely at the user's own risk.
 //
-// Original C# implementation by Peter Sergio Larsen, to work with Accord.NET framework
+// Original C# implementation by Peter Sergio Larsen to work with Accord.NET framework
 // see: https://github.com/accord-net/framework/blob/master/Sources/Extras/Accord.Math.Noncommercial/NonlinearConjugateGradient.cs
 //
 // Changes by [sdsepara, 2018]: 
