@@ -75,6 +75,7 @@
     <Compile Include="NeuralNetworkOptions.cs" />
     <Compile Include="Profiler.cs" />
     <Compile Include="Delimiter.cs" />
+    <Compile Include="Optimize.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
 </Project>
