@@ -1005,7 +1005,7 @@ public partial class MainWindow : Gtk.Window
 				Pause();
 			}
 
-			if (CurrentEpoch % 100 == 0)
+			if (CurrentEpoch % 1000 == 0)
 			{
 				UpdateClassifierInfo();
 				UpdateProgressBar();
@@ -1135,6 +1135,8 @@ public partial class MainWindow : Gtk.Window
 		NetworkSetuped = false;
 
 		TrainingDone = false;
+
+		UseOptimizer.Sensitive = true;
 
 		TrainingProgress.Text = "";
 	}
