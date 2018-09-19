@@ -12,6 +12,59 @@ public class FuncOutput
 	}
 }
 
+// Minimize a continuous differentialble multivariate function. Starting point
+// is given by "X" (D by 1), and the function named in the string "f", must
+// return a function value and a vector of partial derivatives. The Polack-
+// Ribiere flavour of conjugate gradients is used to compute search directions,
+// and a line search using quadratic and cubic polynomial approximations and the
+// Wolfe-Powell stopping criteria is used together with the slope ratio method
+// for guessing initial step sizes. Additionally a bunch of checks are made to
+// make sure that exploration is taking place and that extrapolation will not
+// be unboundedly large. The "length" gives the length of the run: if it is
+// positive, it gives the maximum number of line searches, if negative its
+// absolute gives the maximum allowed number of function evaluations. You can
+// (optionally) give "length" a second component, which will indicate the
+// reduction in function value to be expected in the first line-search (defaults
+// to 1.0). The function returns when either its length is up, or if no further
+// progress can be made (ie, we are at a minimum, or so close that due to
+// numerical problems, we cannot get any closer). If the function terminates
+// within a few iterations, it could be an indication that the function value
+// and derivatives are not consistent (ie, there may be a bug in the
+// implementation of your "f" function). The function returns the found
+// solution "X", a vector of function values "fX" indicating the progress made
+// and "i" the number of iterations (line searches or function evaluations,
+// depending on the sign of "length") used.
+//
+// Usage: [X, fX, i] = fmincg(f, X, options, P1, P2, P3, P4, P5, P6, P7)
+//
+// See also: checkgrad 
+//
+// Copyright (C) 2001 and 2002 by Carl Edward Rasmussen. Date 2002-02-13
+//
+//
+// (C) Copyright 1999, 2000 & 2001, Carl Edward Rasmussen
+// 
+// Permission is granted for anyone to copy, use, or modify these
+// programs and accompanying documents for purposes of research or
+// education, provided this copyright notice is retained, and note is
+// made of any changes that have been made.
+// 
+// These programs and documents are distributed without any warranty,
+// express or implied.  As the programs were written for research
+// purposes only, they have not been tested to the degree that would be
+// advisable in any important application.  All use of these programs is
+// entirely at the user's own risk.
+//
+// Original C# implementation by Peter Sergio Larsen, to work with Accord.NET framework
+// see: https://github.com/accord-net/framework/blob/master/Sources/Extras/Accord.Math.Noncommercial/NonlinearConjugateGradient.cs
+//
+// Changes by [sdsepara, 2018]: 
+//
+// 1) Function to minimize must return a result of type FuncOutput (see above)
+// 2) success and ls_failed changed to type bool, and M to type int. 
+// 3) modified to work with NeuralNetworkClassifier
+// 4) each call to StepOptimizer executes just one cycle of optimization
+//
 public class Optimize
 {
 	// RHO and SIG are the constants in the Wolfe-Powell conditions
@@ -109,6 +162,9 @@ public class Optimize
 
 	public bool Step(Func<double[], FuncOutput> F, double[] X)
 	{
+		// from R/Matlab smallest non-zero normalized floating point number
+		double realmin = 2.225074e-308;
+
 		// count iterations?!
 		if (length > 0)
 			iteration++;
@@ -242,7 +298,7 @@ public class Optimize
 			var A1 = 6 * (f2 - f3) / z3 + 3 * (d2 + d3);
 			var B1 = 3 * (f3 - f2) - z3 * (d3 + 2 * d2);
 
-			// num.error possible - ok!
+			// num error possible - ok!
 			var z21 = -d2 * z3 * z3 / (B1 + Math.Sqrt(B1 * B1 - A1 * d2 * z3 * z3));
 
 			if (z21 < 0)
@@ -349,7 +405,7 @@ public class Optimize
 			}
 
 			// slope ratio but max RATIO
-			z1 = z1 * Math.Min(RATIO, (d1 / (d2 - 2.225074e-308)));
+			z1 = z1 * Math.Min(RATIO, (d1 / (d2 - realmin)));
 			d1 = d2;
 
 			// this line search did not fail
