@@ -278,7 +278,8 @@ namespace DeepLearnCS
 			var X = ReshapeWeights(Wji, Wkj);
 
 			OptimizerInput = input;
-			Optimizer.Setup(OptimizerCost, ref X);
+
+			Optimizer.Setup(OptimizerCost, X);
 		}
 
 		public bool StepOptimizer(ManagedArray input, NeuralNetworkOptions opts)
@@ -287,7 +288,7 @@ namespace DeepLearnCS
 
 			var X = ReshapeWeights(Wji, Wkj);
 
-			Optimizer.Step(OptimizerCost, ref X);
+			Optimizer.Step(OptimizerCost, X);
 
 			Iterations = Optimizer.Iterations;
 

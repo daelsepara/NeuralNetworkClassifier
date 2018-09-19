@@ -68,7 +68,7 @@ public class Optimize
 		return 0.0;
 	}
 
-	public void Setup(Func<double[], FuncOutput> F, ref double[] X)
+	public void Setup(Func<double[], FuncOutput> F, double[] X)
 	{
 		s = new double[X.Length];
 
@@ -107,7 +107,7 @@ public class Optimize
 		DF0 = new double[X.Length];
 	}
 
-	public bool Step(Func<double[], FuncOutput> F, ref double[] X)
+	public bool Step(Func<double[], FuncOutput> F, double[] X)
 	{
 		// count iterations?!
 		if (length > 0)
