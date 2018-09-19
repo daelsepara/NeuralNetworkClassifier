@@ -138,7 +138,6 @@ public partial class MainWindow : Gtk.Window
 
 		LearningRate.Sensitive = toggle;
 		HiddenLayerNodes.Sensitive = toggle;
-		Epochs.Sensitive = toggle;
 		Tolerance.Sensitive = toggle;
 		Classification.Sensitive = toggle;
 		Threshold.Sensitive = toggle;
@@ -467,6 +466,12 @@ public partial class MainWindow : Gtk.Window
 
 			TrainingProgress.Text = TrainingDone ? "Done" : String.Format("Training ({0}%)...", Convert.ToInt32(TrainingProgress.Fraction * 100));
 		}
+	}
+
+	protected void UpdateTrainingDisplay()
+	{
+		UpdateClassifierInfo();
+		UpdateProgressBar();
 	}
 
 	protected void UpdateParameters(TextView text, SpinButton counter, SpinButton counter2, bool isTraining = true)
@@ -998,14 +1003,16 @@ public partial class MainWindow : Gtk.Window
 				Classify();
 
 				UseOptimizer.Sensitive = true;
+				Epochs.Sensitive = true;
+
+				UpdateTrainingDisplay();
 
 				Pause();
 			}
 
 			if (CurrentEpoch % 1000 == 0)
 			{
-				UpdateClassifierInfo();
-				UpdateProgressBar();
+				UpdateTrainingDisplay();
 			}
 		}
 
@@ -1091,6 +1098,7 @@ public partial class MainWindow : Gtk.Window
 
 		if (!NetworkSetuped)
 		{
+			Epochs.Sensitive = false;
 			UseOptimizer.Sensitive = false;
 
 			SetupNetworkTraining();
@@ -1111,8 +1119,7 @@ public partial class MainWindow : Gtk.Window
 		if (Paused)
 			return;
 
-		UpdateProgressBar();
-		UpdateClassifierInfo();
+		UpdateTrainingDisplay();
 
 		Pause();
 	}
@@ -1134,6 +1141,7 @@ public partial class MainWindow : Gtk.Window
 		TrainingDone = false;
 
 		UseOptimizer.Sensitive = true;
+		Epochs.Sensitive = true;
 
 		TrainingProgress.Text = "";
 	}

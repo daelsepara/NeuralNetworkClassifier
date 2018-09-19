@@ -217,29 +217,6 @@ namespace DeepLearnCS
 			return classification;
 		}
 
-		public void Train(ManagedArray input, ManagedArray output, NeuralNetworkOptions opts)
-		{
-			Wji = new ManagedArray(opts.Inputs + 1, opts.Nodes);
-			Wkj = new ManagedArray(opts.Nodes + 1, opts.Categories);
-
-			Y_output = Labels(output, opts);
-
-			Random random = new Random(Guid.NewGuid().GetHashCode());
-
-			Rand(Wji, random);
-			Rand(Wkj, random);
-
-			Cost = 1.0;
-			L2 = 0.0;
-
-			Iterations = 0;
-
-			while (!double.IsNaN(Cost) && Iterations < opts.Epochs && Cost > opts.Tolerance)
-			{
-				Step(input, opts);
-			}
-		}
-
 		public void Setup(ManagedArray output, NeuralNetworkOptions opts)
 		{
 			Wji = new ManagedArray(opts.Inputs + 1, opts.Nodes);
@@ -269,53 +246,11 @@ namespace DeepLearnCS
 			return (double.IsNaN(Cost) || Iterations >= opts.Epochs || Cost < opts.Tolerance);
 		}
 
-		public void SetupOptimizer(ManagedArray input, ManagedArray output, NeuralNetworkOptions opts)
+		public void Train(ManagedArray input, ManagedArray output, NeuralNetworkOptions opts)
 		{
 			Setup(output, opts);
 
-			Optimizer.MaxIterations = opts.Epochs;
-
-			var X = ReshapeWeights(Wji, Wkj);
-
-			OptimizerInput = input;
-
-			Optimizer.Setup(OptimizerCost, X);
-		}
-
-		public bool StepOptimizer(ManagedArray input, NeuralNetworkOptions opts)
-		{
-			OptimizerInput = input;
-
-			var X = ReshapeWeights(Wji, Wkj);
-
-			Optimizer.Step(OptimizerCost, X);
-
-			Iterations = Optimizer.Iterations;
-
-			Cost = Optimizer.f1;
-
-			OptimizerInput = null;
-
-			return (double.IsNaN(Cost) || Iterations >= opts.Epochs || Cost < opts.Tolerance);
-		}
-
-		ManagedArray OptimizerInput;
-
-		public FuncOutput OptimizerCost(double[] X)
-		{
-			RecoverWeights(X, Wji, Wkj);
-
-			if (OptimizerInput != null)
-				Forward(OptimizerInput);
-
-			if (OptimizerInput != null)
-				BackPropagation(OptimizerInput);
-
-			X = ReshapeWeights(DeltaWji, DeltaWkj);
-
-			ManagedOps.Free(DeltaWji, DeltaWkj);
-
-			return new FuncOutput(Cost, X);
+			while (!Step(input, opts)) { }
 		}
 
 		// Reshape Network Weights for use in optimizer
@@ -374,6 +309,62 @@ namespace DeepLearnCS
 					index++;
 				}
 			}
+		}
+
+		ManagedArray OptimizerInput;
+
+		public void SetupOptimizer(ManagedArray input, ManagedArray output, NeuralNetworkOptions opts)
+		{
+			Setup(output, opts);
+
+			Optimizer.MaxIterations = opts.Epochs;
+
+			var X = ReshapeWeights(Wji, Wkj);
+
+			OptimizerInput = input;
+
+			Optimizer.Setup(OptimizerCost, X);
+		}
+
+		public bool StepOptimizer(ManagedArray input, NeuralNetworkOptions opts)
+		{
+			OptimizerInput = input;
+
+			var X = ReshapeWeights(Wji, Wkj);
+
+			Optimizer.Step(OptimizerCost, X);
+
+			Iterations = Optimizer.Iterations;
+
+			Cost = Optimizer.f1;
+
+			OptimizerInput = null;
+
+			return (double.IsNaN(Cost) || Iterations >= opts.Epochs || Cost < opts.Tolerance);
+		}
+
+		public FuncOutput OptimizerCost(double[] X)
+		{
+			RecoverWeights(X, Wji, Wkj);
+
+			if (OptimizerInput != null)
+				Forward(OptimizerInput);
+
+			if (OptimizerInput != null)
+				BackPropagation(OptimizerInput);
+
+			X = ReshapeWeights(DeltaWji, DeltaWkj);
+
+			ManagedOps.Free(DeltaWji, DeltaWkj);
+
+			return new FuncOutput(Cost, X);
+		}
+
+		public void Optimize(ManagedArray input, ManagedArray output, NeuralNetworkOptions opts)
+		{
+			SetupOptimizer(input, output, opts);
+
+			while (!StepOptimizer(input, opts)) { }
 		}
 
 		public void LoadInputLayerWeights(string BaseDirectory, string BaseFileName, int sizex, int sizey)
