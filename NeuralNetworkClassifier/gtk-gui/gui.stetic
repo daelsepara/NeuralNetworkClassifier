@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <stetic-interface>
   <configuration>
     <images-root-path>..</images-root-path>
@@ -95,7 +95,7 @@
             <property name="WidthRequest">720</property>
             <property name="HeightRequest">490</property>
             <property name="CanFocus">True</property>
-            <property name="CurrentPage">3</property>
+            <property name="CurrentPage">1</property>
             <signal name="SwitchPage" handler="OnMainNotebookSwitchPage" />
             <child>
               <widget class="Gtk.Fixed" id="LayoutPageData">
@@ -676,6 +676,20 @@
                   </widget>
                   <packing>
                     <property name="X">70</property>
+                    <property name="Y">420</property>
+                  </packing>
+                </child>
+                <child>
+                  <widget class="Gtk.CheckButton" id="UseOptimizer">
+                    <property name="MemberName" />
+                    <property name="Label" translatable="yes">Use Optimizer</property>
+                    <property name="DrawIndicator">True</property>
+                    <property name="HasLabel">True</property>
+                    <property name="UseUnderline">True</property>
+                    <property name="FocusOnClick">False</property>
+                  </widget>
+                  <packing>
+                    <property name="X">450</property>
                     <property name="Y">420</property>
                   </packing>
                 </child>

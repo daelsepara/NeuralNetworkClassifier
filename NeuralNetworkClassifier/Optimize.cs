@@ -4,23 +4,36 @@ public class FuncOutput
 {
 	public double Error;
 	public double[] Gradient;
+
+	public FuncOutput(double error, double[] X)
+	{
+		Gradient = new double[X.Length];
+		Error = error;
+
+		for (int i = 0; i < X.Length; i++)
+		    Gradient[i] = X[i];
+	}
 }
 
 public class Optimize
 {
-	// constants from Wolfe Powell conditions 
+	// RHO and SIG are the constants in the Wolfe-Powell conditions
 	double RHO = 0.01;
 	double SIG = 0.5;
+
+	// don't reevaluate within 0.1 of the limit of the current bracket
 	double INT = 0.1;
 
-	// extrapolate three times the bracket 
+	// extrapolate maximum 3 times the current bracket
 	double EXT = 3.0;
 
-	// max 20 function evaluation pr. line search
+	// max 20 function evaluations per line search
 	int MAX = 20;
 
 	// maximum allowed slope ratio
 	double RATIO = 100.0;
+
+	// reduction parameter
 	int Red = 1;
 
 	double[] s;
@@ -33,24 +46,33 @@ public class Optimize
 	int length;
 	int M;
 	int iteration;
-	int Linessearch_isfailed;
+	bool ls_failed;
 
 	public double f1;
-	public double[] X;
 
 	double[] X0;
 	double[] DF0;
 
-	Func<double[], FuncOutput> F;
-
 	double d1;
 	double z1;
 
-	public void Setup(Func<double[], FuncOutput> f, double[] x)
-	{
-		F = f;
-		X = x;
+	double Multiply(double[] a, double[] b)
+    {
+        if (a.Length == b.Length)
+        {
+            var dot = 0.0;
 
+            for (var i = 0; i < a.Length; i++)
+                dot += a[i] * b[i];
+
+            return dot;
+        }
+
+        return 0.0;
+    }
+
+	public void Setup(Func<double[], FuncOutput> F, ref double[] X)
+	{
 		s = new double[X.Length];
 
 		Evaluations = 0;
@@ -58,61 +80,45 @@ public class Optimize
 
 		length = MaxIterations;
 		M = 0;
-		iteration = 0;
-		Linessearch_isfailed = 0;
+		iteration = 0; // zero the run length counter
+		ls_failed = false; // no previous line search has failed
 
+		// get function value and gradient
 		var eval = F(X);
-
-		// get first function eval
 		f1 = eval.Error;
-
-		// get first grad eval
 		df1 = eval.Gradient;
 
 		Evaluations++;
 
+		// count epochs?!
 		if (length < 0)
 			iteration++;
 
-		// this is the steepest search directions 
+		// search direction is steepest
 		for (int i = 0; i < df1.Length; i++)
 			s[i] = -df1[i];
 
-		// this is the slope of the line in negative direction
+		// this is the slope
 		d1 = 0.0;
 		for (int j = 0; j < s.Length; j++)
 			d1 += -s[j] * s[j];
 
-		// initial step is red(red/|s|+1)
+		// initial step is red / (|s|+1)
 		z1 = Red / (1 - d1);
 
 		X0 = new double[X.Length];
 		DF0 = new double[X.Length];
 	}
 
-	double Dot(double[] a, double[] b)
+	public bool Step(Func<double[], FuncOutput> F, ref double[] X)
 	{
-		if (a.Length == b.Length)
-		{
-			var dot = 0.0;
-
-			for (var i = 0; i < a.Length; i++)
-				dot += a[i] * b[i];
-
-			return dot;
-		}
-
-		return 0.0;
-	}
-
-	public bool Step()
-	{
+		// count iterations?!
 		if (length > 0)
-			iteration++; // count epoch(iter)
+			iteration++;
 
 		Iterations = iteration;
 
-		// make copy of current values
+		// make a copy of current values
 		for (int j = 0; j < X0.Length; j++)
 			X0[j] = X[j];
 
@@ -131,15 +137,16 @@ public class Optimize
 
 		Evaluations++;
 
+		// count epochs?!
 		if (length < 0)
 			iteration++;
 
+		// initialize point 3 equal to point 1
 		double d2 = 0;
 
 		for (int i = 0; i < df2.Length; i++)
 			d2 += df2[i] * s[i];
 
-		// initialize point 3 equal to point 1
 		double f3 = f1, d3 = d1, z3 = -z1;
 
 		if (length > 0)
@@ -159,12 +166,11 @@ public class Optimize
 
 		while (true)
 		{
-			//f2 = 0.70; 
 			while (((f2 > f1 + z1 * RHO * d1) || (d2 > -SIG * d1)) && (M > 0))
 			{
-				limit = z1; // tighten bracket
+				// tighten bracket
+				limit = z1;
 
-				// values for cubic or quadratic fit
 				double A = 0.0d;
 				double B = 0.0d;
 				double z2 = 0.0d;
@@ -186,13 +192,15 @@ public class Optimize
 
 				if (Double.IsNaN(z2) || Double.IsInfinity(z2) || Double.IsNegativeInfinity(z2))
 				{
+					// if we had a numerical problem then bisect
 					z2 = z3 / 2.0;
 				}
 
 				// don't accept too close to limit
 				z2 = Math.Max(Math.Min(z2, INT * z3), (1 - INT) * z3);
 
-				z1 = z1 + z2; // update this step 
+				// update the step
+				z1 = z1 + z2;
 				for (int j = 0; j < X.Length; j++)
 					X[j] += s[j] * z2;
 
@@ -203,18 +211,16 @@ public class Optimize
 
 				M = M - 1;
 
-				// count epochs 
+				// count epochs?!
 				if (length < 0)
 					iteration++;
 
-				// new slope
 				d2 = 0.0;
 				for (int i = 0; i < df2.Length; i++)
 					d2 += df2[i] * s[i];
 
 				// z3 is now relative to the location of z2
 				z3 = z3 - z2;
-
 			}
 
 			if (f2 > (f1 + z1 * RHO * d1) || d2 > (-SIG * d1))
@@ -224,17 +230,22 @@ public class Optimize
 			}
 			else if (d2 > (SIG * d1))
 			{
+				// success
 				success = true;
-				break; // success
+
+				break;
 			}
 			else if (M == 0)
 			{
-				break; // failure
+				// failure
+				break;
 			}
 
-			// Make cubic extrapolation 
+			// make cubic extrapolation
 			var A1 = 6 * (f2 - f3) / z3 + 3 * (d2 + d3);
 			var B1 = 3 * (f3 - f2) - z3 * (d3 + 2 * d2);
+
+			// num.error possible - ok!
 			var z21 = -d2 * z3 * z3 / (B1 + Math.Sqrt(B1 * B1 - A1 * d2 * z3 * z3));
 
 			if (z21 < 0)
@@ -242,33 +253,37 @@ public class Optimize
 				z21 = z21 * -1;
 			}
 
-			// num prop or wrong sign  ? 
+			// num prob or wrong sign?
 			if (double.IsNaN(z21) || double.IsInfinity(z21) || z21 < 0)
 			{
-				if (limit < -0.5) // no upper limit
+				// if we have no upper limit
+				if (limit < -0.5)
 				{
+					// then extrapolate the maximum amount
 					z21 = z1 * (EXT - 1);
 				}
 				else
 				{
+					// otherwise bisect
 					z21 = (limit - z1) / 2;
 				}
 			}
 			else if (limit > -0.5 && (z21 + z1 > limit))
 			{
+				// extrapolation beyond limit?
+
+				// set to extrapolation limit
 				z21 = (limit - z1) / 2;
 			}
-
 			else if (limit < -0.5 && (z21 + z1 > z1 * EXT))
 			{
 				z21 = z1 * (EXT - 1.0);
 			}
-
 			else if (z21 < -z3 * INT)
 			{
+				// too close to limit?
 				z21 = -z3 * INT;
 			}
-
 			else if ((limit > -0.5) && (z21 < (limit - z1) * (1.0 - INT)))
 			{
 				z21 = (limit - z1) * (1.0 - INT);
@@ -280,7 +295,7 @@ public class Optimize
 			z3 = -z21;
 			z1 = z1 + z21;
 
-			// update current estimate
+			// update current estimates
 			for (int j = 0; j < X.Length; j++)
 				X[j] += s[j] * z21;
 
@@ -290,26 +305,29 @@ public class Optimize
 			f2 = eval.Error;
 
 			M = M - 1;
-			iteration = iteration + (length < 0 ? 1 : 0); // count epochs
+
+			// count epochs?!
+			iteration = iteration + (length < 0 ? 1 : 0);
 
 			d2 = 0;
 			for (int i = 0; i < df2.Length; i++)
 				d2 += df2[i] * s[i];
 
-		}// end of line search
+			// end of line search
+		}
 
-		if (success) // if line searched succeded 
+        // if line searched succeeded 
+		if (success)
 		{
 			f1 = f2;
 
-			// Polack- Ribiere direction
-			var ptemp1 = Dot(df2, df2) - Dot(df1, df2);
-			var ptemp2 = Dot(df1, df1);
+			// Polack-Ribiere direction
+			var ptemp1 = Multiply(df2, df2) - Multiply(df1, df2);
+			var ptemp2 = Multiply(df1, df1);
 			var ptemp3 = ptemp1 / ptemp2;
 
 			for (int j = 0; j < s.Length; j++)
 				s[j] = s[j] * ptemp3 - df2[j];
-
 
 			// swap derivatives
 			var tmp = df1;
@@ -333,10 +351,12 @@ public class Optimize
 					d2 -= s[i] * s[i];
 			}
 
-			// slope ration but max ratio
-			z1 = z1 * Math.Min(RATIO, (d1 / (d2 - 2.2251e-308)));
+			// slope ratio but max RATIO
+			z1 = z1 * Math.Min(RATIO, (d1 / (d2 - 2.225074e-308)));
 			d1 = d2;
-			Linessearch_isfailed = 0; // this linesearch did not fail
+
+			// this line search did not fail
+			ls_failed = false; 
 		}
 		else
 		{
@@ -350,15 +370,18 @@ public class Optimize
 				df1[j] = DF0[j];
 
 			// line search twice in a row
-			if (Linessearch_isfailed == 1 || iteration > Math.Abs(length))
+			if (ls_failed || iteration > Math.Abs(length))
 			{
-				return true; // or we ran out of time , so we give up
+				// or we ran out of time, so we give up
+				return true; 
 			}
 
+			// swap derivatives
 			var tmp = df1;
 			df1 = df2;
-			df2 = tmp; // swap derivatives
+			df2 = tmp;
 
+			// try steepest
 			for (int i = 0; i < df1.Length; i++)
 				s[i] = -df1[i];
 
@@ -368,7 +391,8 @@ public class Optimize
 
 			z1 = 1d / (1d - d1);
 
-			Linessearch_isfailed = 1; // this line search failed
+			// this line search failed
+			ls_failed = true;
 		}
 
 		return !(iteration < Math.Abs(length));

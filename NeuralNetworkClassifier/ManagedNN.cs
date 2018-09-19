@@ -21,6 +21,8 @@ namespace DeepLearnCS
 
 		public int Iterations;
 
+		Optimize Optimizer = new Optimize();
+
 		// Forward Propagation
 		public void Forward(ManagedArray training)
 		{
@@ -251,7 +253,7 @@ namespace DeepLearnCS
 			Rand(Wkj, random);
 
 			Cost = 1.0;
-			L2 = 0.0;
+			L2 = 1.0;
 
 			Iterations = 0;
 		}
@@ -266,6 +268,117 @@ namespace DeepLearnCS
 
 			return (double.IsNaN(Cost) || Iterations >= opts.Epochs || Cost < opts.Tolerance);
 		}
+
+		public void SetupOptimizer(ManagedArray input, ManagedArray output, NeuralNetworkOptions opts)
+		{
+			Setup(output, opts);
+
+			Optimizer.MaxIterations = opts.Epochs;
+
+			var X = ReshapeWeights(Wji, Wkj);
+
+			OptimizerInput = input;
+			Optimizer.Setup(OptimizerCost, ref X);
+		}
+
+		public bool StepOptimizer(ManagedArray input, NeuralNetworkOptions opts)
+		{
+			OptimizerInput = input;
+
+			var X = ReshapeWeights(Wji, Wkj);
+
+			Optimizer.Step(OptimizerCost, ref X);
+
+			Iterations = Optimizer.Iterations;
+
+			Cost = Optimizer.f1;
+
+			OptimizerInput = null;
+
+			var result = (double.IsNaN(Cost) || Iterations >= opts.Epochs || Cost < opts.Tolerance);
+
+            if (result)
+			{
+				ManagedOps.Free(DeltaWji, DeltaWkj);
+			}
+
+			return result;
+		}
+
+		ManagedArray OptimizerInput;
+
+		public FuncOutput OptimizerCost(double[] X)
+		{
+			RecoverWeights(X, Wji, Wkj);
+
+			if (OptimizerInput != null)
+				Forward(OptimizerInput);
+
+			if (OptimizerInput != null)
+				BackPropagation(OptimizerInput);
+
+            X = ReshapeWeights(DeltaWji, DeltaWkj);
+
+			return new FuncOutput(Cost, X);
+		}
+
+        // Reshape Network Weights for use in optimizer
+		public double[] ReshapeWeights(ManagedArray A, ManagedArray B)
+		{
+			var X = new double[A.x * A.y + B.x * B.y];
+
+			var index = 0;
+
+			for (var x = 0; x < A.x; x++)
+			{
+				for (var y = 0; y < A.y; y++)
+				{
+					X[index] = A[x, y];
+
+					index++;
+				}
+			}
+
+			for (var x = 0; x < B.x; x++)
+            {
+				for (var y = 0; y < B.y; y++)
+                {
+					X[index] = B[x, y];
+
+                    index++;
+                }
+            }
+
+			return X;
+		}
+
+		// Reshape Network Weights for use in optimizer
+		public void RecoverWeights(double[] X, ManagedArray A, ManagedArray B)
+        {
+            var index = 0;
+
+            for (var x = 0; x < A.x; x++)
+            {
+                for (var y = 0; y < A.y; y++)
+                {
+					if (index < X.Length)
+						A[x, y] = X[index];
+
+                    index++;
+                }
+            }
+
+            for (var x = 0; x < B.x; x++)
+            {
+                for (var y = 0; y < B.y; y++)
+                {
+					if (index < X.Length)
+						B[x, y] = X[index];
+
+                    index++;
+                }
+            }
+        }
 
 		public void LoadInputLayerWeights(string BaseDirectory, string BaseFileName, int sizex, int sizey)
 		{

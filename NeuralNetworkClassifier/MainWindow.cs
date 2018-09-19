@@ -667,7 +667,14 @@ public partial class MainWindow : Gtk.Window
         Options.Nodes = Convert.ToInt32(HiddenLayerNodes.Value);
         Options.Tolerance = Convert.ToDouble(Tolerance.Value) / 1.0e5;
 
-        Network.Setup(OutputData, Options);
+		if (UseOptimizer.Active)
+		{
+			Network.SetupOptimizer(InputData, OutputData, Options);
+		}
+		else
+		{
+            Network.Setup(OutputData, Options);	
+		}
 
         DataTrainingSet.Buffer.Text = training;
     }
@@ -977,14 +984,14 @@ public partial class MainWindow : Gtk.Window
 
         if (!Paused && NetworkSetuped)
         {
-            CurrentEpoch++;
+			var result = UseOptimizer.Active ? Network.StepOptimizer(InputData, Options) : Network.Step(InputData, Options);
 
-            var result = Network.Step(InputData, Options);
-
-            var Epoch = Convert.ToInt32(Epochs.Value);
+			CurrentEpoch = Network.Iterations;
 
             if (result)
             {
+				var Epoch = Convert.ToInt32(Epochs.Value);
+
 				UpdateNetworkWeights();
 
 				CurrentEpoch = Epoch;
@@ -996,7 +1003,7 @@ public partial class MainWindow : Gtk.Window
                 Pause();
             }
 
-            if (CurrentEpoch % 1000 == 0)
+            if (CurrentEpoch % 100 == 0)
             {
                 UpdateClassifierInfo();
                 UpdateProgressBar();
@@ -1088,6 +1095,8 @@ public partial class MainWindow : Gtk.Window
 			SetupNetworkTraining();
 
 			Classification.Buffer.Clear();
+
+			CurrentEpoch = Network.Iterations;
         }
 
         UpdateProgressBar();
