@@ -261,8 +261,8 @@ public partial class MainWindow : Gtk.Window
 	{
 		TextLoader.Title = title;
 
-		// Add most recent directory
-		if (!string.IsNullOrEmpty(TextLoader.Filename))
+        // Add most recent directory
+        if (!string.IsNullOrEmpty(TextLoader.Filename))
 		{
 			var directory = System.IO.Path.GetDirectoryName(TextLoader.Filename);
 
@@ -294,8 +294,8 @@ public partial class MainWindow : Gtk.Window
 	{
 		TextLoader.Title = title;
 
-		// Add most recent directory
-		if (!string.IsNullOrEmpty(TextLoader.Filename))
+        // Add most recent directory
+        if (!string.IsNullOrEmpty(TextLoader.Filename))
 		{
 			var directory = System.IO.Path.GetDirectoryName(TextLoader.Filename);
 
@@ -366,8 +366,8 @@ public partial class MainWindow : Gtk.Window
 
 		string directory;
 
-		// Add most recent directory
-		if (!string.IsNullOrEmpty(TextSaver.Filename))
+        // Add most recent directory
+        if (!string.IsNullOrEmpty(TextSaver.Filename))
 		{
 			directory = System.IO.Path.GetDirectoryName(TextSaver.Filename);
 
@@ -656,8 +656,8 @@ public partial class MainWindow : Gtk.Window
 
 		NetworkSetuped = SetupInputData(training);
 
-		// Reset Network
-		Network.Free();
+        // Reset Network
+        Network.Free();
 
 		Options.Alpha = Convert.ToDouble(LearningRate.Value) / 1.0e2;
 		Options.Epochs = Convert.ToInt32(Epochs.Value);
@@ -840,8 +840,8 @@ public partial class MainWindow : Gtk.Window
 		if (string.IsNullOrEmpty(inputLayer) || string.IsNullOrEmpty(hiddenLayer) || string.IsNullOrEmpty(normalization))
 			return;
 
-		// Reset Network
-		Network.Free();
+        // Reset Network
+        Network.Free();
 
 		Options.Alpha = Convert.ToDouble(LearningRate.Value) / 1.0e2;
 		Options.Epochs = Convert.ToInt32(Epochs.Value);
@@ -938,8 +938,8 @@ public partial class MainWindow : Gtk.Window
 
 	protected void CleanShutdown()
 	{
-		// Clean-Up Routines Here
-		Network.Free();
+        // Clean-Up Routines Here
+        Network.Free();
 
 		ManagedOps.Free(InputData, OutputData, TestData, NormalizationData);
 	}
