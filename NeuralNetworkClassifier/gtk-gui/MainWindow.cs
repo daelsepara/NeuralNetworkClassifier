@@ -239,7 +239,7 @@ public partial class MainWindow
 		this.MainNotebook.HeightRequest = 490;
 		this.MainNotebook.CanFocus = true;
 		this.MainNotebook.Name = "MainNotebook";
-		this.MainNotebook.CurrentPage = 3;
+		this.MainNotebook.CurrentPage = 2;
 		// Container child MainNotebook.Gtk.Notebook+NotebookChild
 		this.LayoutPageData = new global::Gtk.Fixed();
 		this.LayoutPageData.Name = "LayoutPageData";
