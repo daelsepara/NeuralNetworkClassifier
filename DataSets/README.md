@@ -58,7 +58,7 @@
 
 **Primes**
 
-Prime numbers between 0 and 255
+Prime numbers in the range 0-255
 
 * Dimensions = 8
 * Categories = 1 (binary, 0 or 1)
