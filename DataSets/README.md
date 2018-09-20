@@ -6,7 +6,7 @@
 * Categories = 7
 * Samples = 788
 
-![Aggregation](/DataSets/Aggregation.png)
+![Aggregation](/DataSets/Visualizations/Aggregation.png)
 
 **Compound**
 
@@ -14,7 +14,7 @@
 * Categories = 6
 * Samples = 399
 
-![Compound](/DataSets/Compound.png)
+![Compound](/DataSets/Visualizations/Compound.png)
 
 **D31**
 
@@ -22,7 +22,7 @@
 * Categories = 31
 * Samples = 3100
 
-![D31](/DataSets/D31.png)
+![D31](/DataSets/Visualizations/D31.png)
 
 **Flame**
 
@@ -30,7 +30,7 @@
 * Categories = 2
 * Samples = 240
 
-![Flame](/DataSets/flame.png)
+![Flame](/DataSets/Visualizations/flame.png)
 
 **Iris**
 
@@ -38,7 +38,7 @@
 * Categories = 3
 * Samples = 150
 
-![Iris](/DataSets/Iris.png)
+![Iris](/DataSets/Visualizations/Iris.png)
 
 **Jain**
 
@@ -46,7 +46,7 @@
 * Categories = 2
 * Samples = 373
 
-![Jain](/DataSets/jain.png)
+![Jain](/DataSets/Visualizations/jain.png)
 
 **Path-based**
 
@@ -54,7 +54,7 @@
 * Categories = 3
 * Samples = 300
 
-![Path-based](/DataSets/pathbased.png)
+![Path-based](/DataSets/Visualizations/pathbased.png)
 
 **Primes**
 
@@ -64,7 +64,7 @@ Prime numbers between 0 and 255
 * Categories = 1 (binary, 0 or 1)
 * Samples = 256
 
-![Primes](/DataSets/primes.png)
+![Primes](/DataSets/Visualizations/primes.png)
 
 **R15**
 
@@ -72,7 +72,7 @@ Prime numbers between 0 and 255
 * Categories = 15
 * Samples = 600
 
-![R15](/DataSets/R15.png)
+![R15](/DataSets/Visualizations/R15.png)
 
 **Spiral**
 
@@ -80,7 +80,7 @@ Prime numbers between 0 and 255
 * Categories = 3
 * Samples = 312
 
-![R15](/DataSets/spiral.png)
+![R15](/DataSets/Visualizations/spiral.png)
 
 **XOR gate**
 
