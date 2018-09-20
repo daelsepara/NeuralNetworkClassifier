@@ -221,7 +221,7 @@ public partial class MainWindow : Gtk.Window
 
 								if (tokens.Length > 1)
 								{
-									var last = Convert.ToInt32(tokens[tokens.Length - 1]);
+									var last = Convert.ToInt32(tokens[tokens.Length - 1], ci);
 
 									if (!categories.Contains(last) && last > 0)
 									{
@@ -239,7 +239,7 @@ public partial class MainWindow : Gtk.Window
 
 				if (isTraining && counter != null)
 				{
-					counter.Value = Convert.ToInt32(categories.Count);
+					counter.Value = Convert.ToInt32(categories.Count, ci);
 				}
 
 				view.Buffer.Clear();
@@ -464,7 +464,7 @@ public partial class MainWindow : Gtk.Window
 		{
 			TrainingProgress.Fraction = Math.Round(CurrentEpoch / Epochs.Value, 2);
 
-			TrainingProgress.Text = TrainingDone ? "Done" : String.Format("Training ({0}%)...", Convert.ToInt32(TrainingProgress.Fraction * 100));
+			TrainingProgress.Text = TrainingDone ? "Done" : String.Format("Training ({0}%)...", Convert.ToInt32(TrainingProgress.Fraction * 100, ci));
 		}
 	}
 
@@ -537,10 +537,10 @@ public partial class MainWindow : Gtk.Window
 			Text = text
 		};
 
-		Examples.Value = Convert.ToInt32(TrainingBuffer.LineCount);
+		Examples.Value = Convert.ToInt32(TrainingBuffer.LineCount, ci);
 
-		var inpx = Convert.ToInt32(InputLayerNodes.Value);
-		var inpy = Convert.ToInt32(Examples.Value);
+		var inpx = Convert.ToInt32(InputLayerNodes.Value, ci);
+		var inpy = Convert.ToInt32(Examples.Value, ci);
 
 		ManagedOps.Free(InputData, OutputData, NormalizationData);
 
@@ -573,11 +573,11 @@ public partial class MainWindow : Gtk.Window
 
 					if (inputs > 0 && tokens.Length > inputs)
 					{
-						OutputData[0, y] = Convert.ToDouble(tokens[inputs]);
+						OutputData[0, y] = Convert.ToDouble(tokens[inputs], ci);
 
 						for (int x = 0; x < inpx; x++)
 						{
-							var data = Convert.ToDouble(tokens[x]);
+							var data = Convert.ToDouble(tokens[x], ci);
 
 							NormalizationData[x, min] = data < NormalizationData[x, min] ? data : NormalizationData[x, min];
 							NormalizationData[x, max] = data > NormalizationData[x, max] ? data : NormalizationData[x, max];
@@ -608,10 +608,10 @@ public partial class MainWindow : Gtk.Window
 			Text = text
 		};
 
-		Samples.Value = Convert.ToInt32(TestBuffer.LineCount);
+		Samples.Value = Convert.ToInt32(TestBuffer.LineCount, ci);
 
-		var inpx = Convert.ToInt32(InputLayerNodes.Value);
-		var tsty = Convert.ToInt32(Samples.Value);
+		var inpx = Convert.ToInt32(InputLayerNodes.Value, ci);
+		var tsty = Convert.ToInt32(Samples.Value, ci);
 
 		ManagedOps.Free(TestData);
 
@@ -635,7 +635,7 @@ public partial class MainWindow : Gtk.Window
 					{
 						for (int x = 0; x < inpx; x++)
 						{
-							TestData[x, y] = Convert.ToDouble(tokens[x]);
+							TestData[x, y] = Convert.ToDouble(tokens[x], ci);
 						}
 					}
 				}
@@ -661,13 +661,13 @@ public partial class MainWindow : Gtk.Window
 		// Reset Network
 		Network.Free();
 
-		Options.Alpha = Convert.ToDouble(LearningRate.Value) * 1.0e-2;
-		Options.Epochs = Convert.ToInt32(Epochs.Value);
-		Options.Inputs = Convert.ToInt32(InputLayerNodes.Value);
-		Options.Categories = Convert.ToInt32(Categories.Value);
+		Options.Alpha = Convert.ToDouble(LearningRate.Value, ci) * 1.0e-2;
+		Options.Epochs = Convert.ToInt32(Epochs.Value, ci);
+		Options.Inputs = Convert.ToInt32(InputLayerNodes.Value, ci);
+		Options.Categories = Convert.ToInt32(Categories.Value, ci);
 		Options.Items = InputData.y;
-		Options.Nodes = Convert.ToInt32(HiddenLayerNodes.Value);
-		Options.Tolerance = Convert.ToDouble(Tolerance.Value) * 1.0e-5;
+		Options.Nodes = Convert.ToInt32(HiddenLayerNodes.Value, ci);
+		Options.Tolerance = Convert.ToDouble(Tolerance.Value, ci) * 1.0e-5;
 
 		if (UseOptimizer.Active)
 		{
@@ -693,8 +693,8 @@ public partial class MainWindow : Gtk.Window
 			Text = text
 		};
 
-		var inpx = Convert.ToInt32(InputLayerNodes.Value) + 1;
-		var inpy = Convert.ToInt32(HiddenLayerNodes.Value);
+		var inpx = Convert.ToInt32(InputLayerNodes.Value, ci) + 1;
+		var inpy = Convert.ToInt32(HiddenLayerNodes.Value, ci);
 
 		if (inpx < 2 || inpy < 2 || inpy != InputLayerBuffer.LineCount)
 		{
@@ -743,8 +743,8 @@ public partial class MainWindow : Gtk.Window
 			Text = text
 		};
 
-		var hidx = Convert.ToInt32(HiddenLayerNodes.Value) + 1;
-		var hidy = Convert.ToInt32(Categories.Value);
+		var hidx = Convert.ToInt32(HiddenLayerNodes.Value, ci) + 1;
+		var hidy = Convert.ToInt32(Categories.Value, ci);
 
 		if (hidx < 2 || hidy < 1 || hidy != HiddenLayerBuffer.LineCount)
 		{
@@ -793,7 +793,7 @@ public partial class MainWindow : Gtk.Window
 			Text = text
 		};
 
-		var nrmx = Convert.ToInt32(InputLayerNodes.Value);
+		var nrmx = Convert.ToInt32(InputLayerNodes.Value, ci);
 		var nrmy = 2;
 
 		if (nrmx < 2 || nrmy < 2 || NormalizationBuffer.LineCount < nrmy)
@@ -845,13 +845,13 @@ public partial class MainWindow : Gtk.Window
 		// Reset Network
 		Network.Free();
 
-		Options.Alpha = Convert.ToDouble(LearningRate.Value) / 1.0e2;
-		Options.Epochs = Convert.ToInt32(Epochs.Value);
-		Options.Inputs = Convert.ToInt32(InputLayerNodes.Value);
-		Options.Categories = Convert.ToInt32(Categories.Value);
+		Options.Alpha = Convert.ToDouble(LearningRate.Value, ci) / 1.0e2;
+		Options.Epochs = Convert.ToInt32(Epochs.Value, ci);
+		Options.Inputs = Convert.ToInt32(InputLayerNodes.Value, ci);
+		Options.Categories = Convert.ToInt32(Categories.Value, ci);
 		Options.Items = InputData.y;
-		Options.Nodes = Convert.ToInt32(HiddenLayerNodes.Value);
-		Options.Tolerance = Convert.ToDouble(Tolerance.Value) / 1.0e5;
+		Options.Nodes = Convert.ToInt32(HiddenLayerNodes.Value, ci);
+		Options.Tolerance = Convert.ToDouble(Tolerance.Value, ci) / 1.0e5;
 
 		NetworkSetuped = SetupInputLayerWeights(inputLayer) && SetupHiddenLayerWeights(hiddenLayer) && SetupNormalization(normalization);
 	}
@@ -992,7 +992,7 @@ public partial class MainWindow : Gtk.Window
 
 			if (result)
 			{
-				var Epoch = Convert.ToInt32(Epochs.Value);
+				var Epoch = Convert.ToInt32(Epochs.Value, ci);
 
 				UpdateNetworkWeights();
 
