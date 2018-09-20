@@ -859,6 +859,7 @@
                   <widget class="Gtk.Toolbar" id="LoadNetworkToolbar">
                     <property name="MemberName" />
                     <property name="ShowArrow">False</property>
+                    <property name="ButtonStyle">Icons</property>
                     <node name="LoadNetworkToolbar" type="Toolbar">
                       <node type="Toolitem" action="LoadNetworkButton" />
                     </node>

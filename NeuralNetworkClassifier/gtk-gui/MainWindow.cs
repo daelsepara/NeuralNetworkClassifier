@@ -836,6 +836,7 @@ public partial class MainWindow
 		this.LoadNetworkToolbar = ((global::Gtk.Toolbar)(this.UIManager.GetWidget("/LoadNetworkToolbar")));
 		this.LoadNetworkToolbar.Name = "LoadNetworkToolbar";
 		this.LoadNetworkToolbar.ShowArrow = false;
+		this.LoadNetworkToolbar.ToolbarStyle = ((global::Gtk.ToolbarStyle)(0));
 		this.LayoutPageNetwork.Add(this.LoadNetworkToolbar);
 		global::Gtk.Fixed.FixedChild w70 = ((global::Gtk.Fixed.FixedChild)(this.LayoutPageNetwork[this.LoadNetworkToolbar]));
 		w70.X = 20;
