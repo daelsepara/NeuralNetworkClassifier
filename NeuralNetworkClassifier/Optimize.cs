@@ -64,6 +64,7 @@ public class FuncOutput
 // 2) success and ls_failed changed to type bool, and M to type int. 
 // 3) modified to work with NeuralNetworkClassifier
 // 4) each call to StepOptimizer executes just one cycle of optimization
+// 5) implemented Multiply, Add, Copy helper functions
 //
 public class Optimize
 {
@@ -84,7 +85,7 @@ public class Optimize
 	double RATIO = 100.0;
 
 	// reduction parameter
-	int Red = 1;
+	double Red = 1.0;
 
 	double[] s;
 	double[] df1;
@@ -121,6 +122,24 @@ public class Optimize
 		return 0.0;
 	}
 
+	void Add(double[] dst, double[] src, double scale = 1.0)
+	{
+		if (dst.Length == src.Length)
+		{
+			for (var i = 0; i < dst.Length; i++)
+				dst[i] += scale * src[i];
+		}
+	}
+
+	void Copy(double[] dst, double[] src, double scale = 1.0)
+	{
+		if (dst.Length == src.Length)
+		{
+			for (var i = 0; i < dst.Length; i++)
+				dst[i] = scale * src[i];
+		}
+	}
+
 	public void Setup(Func<double[], FuncOutput> F, double[] X)
 	{
 		s = new double[X.Length];
@@ -145,16 +164,13 @@ public class Optimize
 			iteration++;
 
 		// search direction is steepest
-		for (int i = 0; i < df1.Length; i++)
-			s[i] = -df1[i];
+		Copy(s, df1, -1.0);
 
 		// this is the slope
-		d1 = 0.0;
-		for (int i = 0; i < s.Length; i++)
-			d1 += -s[i] * s[i];
+		d1 = -Multiply(s, s);
 
 		// initial step is red / (|s|+1)
-		z1 = Red / (1 - d1);
+		z1 = Red / (1.0 - d1);
 
 		X0 = new double[X.Length];
 		DF0 = new double[X.Length];
@@ -172,17 +188,14 @@ public class Optimize
 		Iterations = iteration;
 
 		// make a copy of current values
-		for (int i = 0; i < X0.Length; i++)
-			X0[i] = X[i];
+		Copy(X0, X);
 
-		for (int i = 0; i < DF0.Length; i++)
-			DF0[i] = df1[i];
+		Copy(DF0, df1);
 
 		double F0 = f1;
 
 		// begin line search
-		for (int i = 0; i < X.Length; i++)
-			X[i] += s[i] * z1;
+		Add(X, s, z1);
 
 		// evaluate cost - and gradient function with new params
 		double f2 = F(X).Error;
@@ -195,10 +208,7 @@ public class Optimize
 			iteration++;
 
 		// initialize point 3 equal to point 1
-		double d2 = 0;
-
-		for (int i = 0; i < df2.Length; i++)
-			d2 += df2[i] * s[i];
+		double d2 = Multiply(df2, s);
 
 		double f3 = f1, d3 = d1, z3 = -z1;
 
@@ -224,9 +234,9 @@ public class Optimize
 				// tighten bracket
 				limit = z1;
 
-				double A = 0.0d;
-				double B = 0.0d;
-				double z2 = 0.0d;
+				var A = 0.0;
+				var B = 0.0;
+				var z2 = 0.0;
 
 				if (f2 > f1)
 				{
@@ -236,8 +246,8 @@ public class Optimize
 				else
 				{
 					// cubic fit
-					A = (6 * (f2 - f3)) / (z3 + (3 * (d2 + d3)));
-					B = (3 * (f3 - f2) - (z3 * ((d3 + 2) * d2)));
+					A = (6.0 * (f2 - f3)) / (z3 + (3.0 * (d2 + d3)));
+					B = (3.0 * (f3 - f2) - (z3 * ((d3 + 2.0) * d2)));
 
 					// numerical error possible - ok!
 					z2 = Math.Sqrt(((B * B) - (A * d2 * z3)) - B) / A;
@@ -250,12 +260,12 @@ public class Optimize
 				}
 
 				// don't accept too close to limit
-				z2 = Math.Max(Math.Min(z2, INT * z3), (1 - INT) * z3);
+				z2 = Math.Max(Math.Min(z2, INT * z3), (1.0 - INT) * z3);
 
 				// update the step
 				z1 = z1 + z2;
-				for (int i = 0; i < X.Length; i++)
-					X[i] += s[i] * z2;
+
+				Add(X, s, z2);
 
 				eval = F(X);
 				f2 = eval.Error;
@@ -268,9 +278,7 @@ public class Optimize
 				if (length < 0)
 					iteration++;
 
-				d2 = 0.0;
-				for (int i = 0; i < df2.Length; i++)
-					d2 += df2[i] * s[i];
+				d2 = Multiply(df2, s);
 
 				// z3 is now relative to the location of z2
 				z3 = z3 - z2;
@@ -297,15 +305,15 @@ public class Optimize
 			}
 
 			// make cubic extrapolation
-			var A1 = 6 * (f2 - f3) / z3 + 3 * (d2 + d3);
-			var B1 = 3 * (f3 - f2) - z3 * (d3 + 2 * d2);
+			var A1 = 6.0 * (f2 - f3) / z3 + 3.0 * (d2 + d3);
+			var B1 = 3.0 * (f3 - f2) - z3 * (d3 + 2.0 * d2);
 
 			// num error possible - ok!
 			var z21 = -d2 * z3 * z3 / (B1 + Math.Sqrt(B1 * B1 - A1 * d2 * z3 * z3));
 
-			if (z21 < 0)
+			if (z21 < 0.0)
 			{
-				z21 = z21 * -1;
+				z21 = z21 * -1.0;
 			}
 
 			// num prob or wrong sign?
@@ -315,12 +323,12 @@ public class Optimize
 				if (limit < -0.5)
 				{
 					// then extrapolate the maximum amount
-					z21 = z1 * (EXT - 1);
+					z21 = z1 * (EXT - 1.0);
 				}
 				else
 				{
 					// otherwise bisect
-					z21 = (limit - z1) / 2;
+					z21 = (limit - z1) / 2.0;
 				}
 			}
 			else if (limit > -0.5 && (z21 + z1 > limit))
@@ -328,7 +336,7 @@ public class Optimize
 				// extrapolation beyond limit?
 
 				// set to extrapolation limit
-				z21 = (limit - z1) / 2;
+				z21 = (limit - z1) / 2.0;
 			}
 			else if (limit < -0.5 && (z21 + z1 > z1 * EXT))
 			{
@@ -351,8 +359,7 @@ public class Optimize
 			z1 = z1 + z21;
 
 			// update current estimates
-			for (int i = 0; i < X.Length; i++)
-				X[i] += s[i] * z21;
+			Add(X, s, z21);
 
 			// evaluate functions
 			eval = F(X);
@@ -364,9 +371,7 @@ public class Optimize
 			// count epochs?!
 			iteration = iteration + (length < 0 ? 1 : 0);
 
-			d2 = 0;
-			for (int i = 0; i < df2.Length; i++)
-				d2 += df2[i] * s[i];
+			d2 = Multiply(df2, s);
 
 			// end of line search
 		}
@@ -381,8 +386,8 @@ public class Optimize
 			var part2 = Multiply(df1, df2);
 			var part3 = Multiply(df1, df1);
 
-			for (int i = 0; i < s.Length; i++)
-				s[i] = ((part1 - part2) / (part3)) * s[i] - df2[i];
+			Copy(s, s, (part1 - part2) / part3);
+			Add(s, df2, -1.0);
 
 			// swap derivatives
 			var tmp = df1;
@@ -390,24 +395,20 @@ public class Optimize
 			df2 = tmp;
 
 			// get slope
-			d2 = 0;
-			for (int i = 0; i < df1.Length; i++)
-				d2 += df1[i] * s[i];
+			d2 = Multiply(df1, s);
 
 			// new slope must be negative 
-			if (d2 > 0)
+			if (d2 > 0.0)
 			{
 				// use steepest direction
-				for (int i = 0; i < s.Length; i++)
-					s[i] = -df1[i];
+				Copy(s, df1, -1.0);
 
-				d2 = 0;
-				for (int i = 0; i < df1.Length; i++)
-					d2 -= s[i] * s[i];
+				d2 = -Multiply(s, s);
 			}
 
 			// slope ratio but max RATIO
 			z1 = z1 * Math.Min(RATIO, (d1 / (d2 - realmin)));
+
 			d1 = d2;
 
 			// this line search did not fail
@@ -418,11 +419,9 @@ public class Optimize
 			// restore point from before failed line search
 			f1 = F0;
 
-			for (int i = 0; i < X.Length; i++)
-				X[i] = X0[i];
+			Copy(X, X0);
 
-			for (int i = 0; i < df1.Length; i++)
-				df1[i] = DF0[i];
+			Copy(df1, DF0);
 
 			// line search twice in a row
 			if (ls_failed || iteration > Math.Abs(length))
@@ -437,14 +436,11 @@ public class Optimize
 			df2 = tmp;
 
 			// try steepest
-			for (int i = 0; i < df1.Length; i++)
-				s[i] = -df1[i];
+			Copy(s, df1, -1.0);
 
-			d1 = 0;
-			for (int i = 0; i < s.Length; i++)
-				d1 -= s[i] * s[i];
+			d1 = -Multiply(s, s);
 
-			z1 = 1d / (1d - d1);
+			z1 = 1.0 / (1.0 - d1);
 
 			// this line search failed
 			ls_failed = true;
