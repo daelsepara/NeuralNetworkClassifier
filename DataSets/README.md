@@ -104,7 +104,7 @@ H. Chang and D.Y. Yeung, "Robust path-based spectral clustering". Pattern Recogn
 
 ![T4.8K](/DataSets/Visualizations/t4.8k.png)
 
-G. Karypis, E.H. Han, V. Kumar, "CHAMELEON: A hierarchical 765 clustering algorithm using dynamic modeling"- IEEE Trans. on Computers, 32 (8), 68-75, 1999.
+G. Karypis, E.H. Han, V. Kumar, "CHAMELEON: A hierarchical 765 clustering algorithm using dynamic modeling". IEEE Trans. on Computers, 32 (8), 68-75, 1999.
 
 * Dimensions = 2
 * Categories = 7 (1-6, 7 = noise)
