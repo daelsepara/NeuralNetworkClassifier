@@ -32,3 +32,7 @@ You can use the included the powerful Fmincg optimizer (C.E. Rasmussen, 1999, 20
 ![Network Page](/Screenshots/network.png)
 
 Finally, trained network parameters can be saved and loaded for use in future classification tasks or to provide a better starting point for training.
+
+# Platform
+
+Neural Network Classifier software has been tested on Linux, OSX, and Windows platforms.
