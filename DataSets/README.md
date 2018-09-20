@@ -62,6 +62,8 @@ A. Jain and M. Law, "Data clustering: A user's dilemma". Lecture Notes in Comput
 
 **Path-based**
 
+H. Chang and D.Y. Yeung, "Robust path-based spectral clustering". Pattern Recognition, 2008. 41(1): p. 191-203. 
+
 * Dimensions = 2
 * Categories = 3
 * Samples = 300
