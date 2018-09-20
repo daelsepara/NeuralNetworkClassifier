@@ -46,7 +46,7 @@ namespace DeepLearnCS
 			var Zj = ManagedMatrix.Sigm(Z2);
 
 			// add bias column to hidden layer output
-			ManagedArray HiddenBias = new ManagedArray(1, Zj.y);
+			var HiddenBias = new ManagedArray(1, Zj.y);
 			ManagedOps.Set(HiddenBias, 1.0);
 
 			// a_2 = cbind(array(1, c(nrow(z_j), 1)), z_j)
@@ -156,8 +156,8 @@ namespace DeepLearnCS
 
 		ManagedArray Labels(ManagedArray output, NeuralNetworkOptions opts)
 		{
-			ManagedArray result = new ManagedArray(opts.Categories, opts.Items);
-			ManagedArray eye_matrix = ManagedMatrix.Diag(opts.Categories);
+			var result = new ManagedArray(opts.Categories, opts.Items);
+			var eye_matrix = ManagedMatrix.Diag(opts.Categories);
 
 			for (int y = 0; y < opts.Items; y++)
 			{
@@ -183,7 +183,7 @@ namespace DeepLearnCS
 		{
 			Forward(test);
 
-			ManagedIntList classification = new ManagedIntList(test.y);
+			var classification = new ManagedIntList(test.y);
 
 			for (int y = 0; y < test.y; y++)
 			{
@@ -224,7 +224,7 @@ namespace DeepLearnCS
 
 			Y_output = Labels(output, opts);
 
-			Random random = new Random(Guid.NewGuid().GetHashCode());
+			var random = new Random(Guid.NewGuid().GetHashCode());
 
 			Rand(Wji, random);
 			Rand(Wkj, random);
@@ -287,11 +287,11 @@ namespace DeepLearnCS
 		}
 
 		// Transform vector back into Network Weights
-		public void RecoverWeights(double[] X, ManagedArray A, ManagedArray B)
+		public void ReshapeWeights(double[] X, ManagedArray A, ManagedArray B)
 		{
 			if (X.Length != (A.x * A.y + B.x * B.y))
 				return;
-			
+
 			var index = 0;
 
 			for (var x = 0; x < A.x; x++)
@@ -320,22 +320,22 @@ namespace DeepLearnCS
 		ManagedArray OptimizerInput;
 
 		public FuncOutput OptimizerCost(double[] X)
-        {
-            RecoverWeights(X, Wji, Wkj);
+		{
+			ReshapeWeights(X, Wji, Wkj);
 
-            if (OptimizerInput != null)
-                Forward(OptimizerInput);
+			if (OptimizerInput != null)
+				Forward(OptimizerInput);
 
-            if (OptimizerInput != null)
-                BackPropagation(OptimizerInput);
+			if (OptimizerInput != null)
+				BackPropagation(OptimizerInput);
 
-            X = ReshapeWeights(DeltaWji, DeltaWkj);
+			X = ReshapeWeights(DeltaWji, DeltaWkj);
 
 			// cleanup of arrays allocated in BackPropagation
-            ManagedOps.Free(DeltaWji, DeltaWkj);
+			ManagedOps.Free(DeltaWji, DeltaWkj);
 
-            return new FuncOutput(Cost, X);
-        }
+			return new FuncOutput(Cost, X);
+		}
 
 		public void SetupOptimizer(ManagedArray input, ManagedArray output, NeuralNetworkOptions opts)
 		{

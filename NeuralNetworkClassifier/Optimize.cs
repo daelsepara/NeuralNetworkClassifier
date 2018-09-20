@@ -150,8 +150,8 @@ public class Optimize
 
 		// this is the slope
 		d1 = 0.0;
-		for (int j = 0; j < s.Length; j++)
-			d1 += -s[j] * s[j];
+		for (int i = 0; i < s.Length; i++)
+			d1 += -s[i] * s[i];
 
 		// initial step is red / (|s|+1)
 		z1 = Red / (1 - d1);
@@ -172,17 +172,17 @@ public class Optimize
 		Iterations = iteration;
 
 		// make a copy of current values
-		for (int j = 0; j < X0.Length; j++)
-			X0[j] = X[j];
+		for (int i = 0; i < X0.Length; i++)
+			X0[i] = X[i];
 
-		for (int j = 0; j < DF0.Length; j++)
-			DF0[j] = df1[j];
+		for (int i = 0; i < DF0.Length; i++)
+			DF0[i] = df1[i];
 
 		double F0 = f1;
 
 		// begin line search
-		for (int j = 0; j < X.Length; j++)
-			X[j] += s[j] * z1;
+		for (int i = 0; i < X.Length; i++)
+			X[i] += s[i] * z1;
 
 		// evaluate cost - and gradient function with new params
 		double f2 = F(X).Error;
@@ -254,8 +254,8 @@ public class Optimize
 
 				// update the step
 				z1 = z1 + z2;
-				for (int j = 0; j < X.Length; j++)
-					X[j] += s[j] * z2;
+				for (int i = 0; i < X.Length; i++)
+					X[i] += s[i] * z2;
 
 				eval = F(X);
 				f2 = eval.Error;
@@ -281,14 +281,16 @@ public class Optimize
 				// this is a failure
 				break;
 			}
-			else if (d2 > (SIG * d1))
+
+			if (d2 > (SIG * d1))
 			{
 				// success
 				success = true;
 
 				break;
 			}
-			else if (M == 0)
+
+			if (M == 0)
 			{
 				// failure
 				break;
@@ -349,8 +351,8 @@ public class Optimize
 			z1 = z1 + z21;
 
 			// update current estimates
-			for (int j = 0; j < X.Length; j++)
-				X[j] += s[j] * z21;
+			for (int i = 0; i < X.Length; i++)
+				X[i] += s[i] * z21;
 
 			// evaluate functions
 			eval = F(X);
@@ -375,12 +377,12 @@ public class Optimize
 			f1 = f2;
 
 			// Polack-Ribiere direction
-			var ptemp1 = Multiply(df2, df2) - Multiply(df1, df2);
-			var ptemp2 = Multiply(df1, df1);
-			var ptemp3 = ptemp1 / ptemp2;
+			var part1 = Multiply(df2, df2);
+			var part2 = Multiply(df1, df2);
+			var part3 = Multiply(df1, df1);
 
-			for (int j = 0; j < s.Length; j++)
-				s[j] = s[j] * ptemp3 - df2[j];
+			for (int i = 0; i < s.Length; i++)
+				s[i] = ((part1 - part2) / (part3)) * s[i] - df2[i];
 
 			// swap derivatives
 			var tmp = df1;
@@ -416,11 +418,11 @@ public class Optimize
 			// restore point from before failed line search
 			f1 = F0;
 
-			for (int j = 0; j < X.Length; j++)
-				X[j] = X0[j];
+			for (int i = 0; i < X.Length; i++)
+				X[i] = X0[i];
 
-			for (int j = 0; j < df1.Length; j++)
-				df1[j] = DF0[j];
+			for (int i = 0; i < df1.Length; i++)
+				df1[i] = DF0[i];
 
 			// line search twice in a row
 			if (ls_failed || iteration > Math.Abs(length))

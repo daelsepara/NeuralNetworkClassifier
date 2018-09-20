@@ -95,7 +95,7 @@
             <property name="WidthRequest">720</property>
             <property name="HeightRequest">490</property>
             <property name="CanFocus">True</property>
-            <property name="CurrentPage">2</property>
+            <property name="CurrentPage">0</property>
             <signal name="SwitchPage" handler="OnMainNotebookSwitchPage" />
             <child>
               <widget class="Gtk.Fixed" id="LayoutPageData">

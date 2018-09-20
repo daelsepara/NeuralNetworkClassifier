@@ -52,7 +52,7 @@ public partial class MainWindow : Gtk.Window
 
 	protected FileFilter AddFilter(string name, params string[] patterns)
 	{
-		var filter = new FileFilter() { Name = name };
+		var filter = new FileFilter { Name = name };
 
 		foreach (var pattern in patterns)
 			filter.AddPattern(pattern);
@@ -198,7 +198,7 @@ public partial class MainWindow : Gtk.Window
 			var current = DelimiterBox.Active;
 			var delimiter = current >= 0 && current < Delimiters.Count ? Delimiters[current].Character : '\t';
 
-			List<int> categories = new List<int>();
+			var categories = new List<int>();
 
 			if (File.Exists(FileName) && view != null)
 			{
@@ -490,7 +490,7 @@ public partial class MainWindow : Gtk.Window
 
 			using (StringReader reader = new StringReader(input.Text.Trim()))
 			{
-				string line = reader.ReadLine();
+				var line = reader.ReadLine();
 
 				if (!string.IsNullOrEmpty(line))
 				{
@@ -661,13 +661,13 @@ public partial class MainWindow : Gtk.Window
 		// Reset Network
 		Network.Free();
 
-		Options.Alpha = Convert.ToDouble(LearningRate.Value) / 1.0e2;
+		Options.Alpha = Convert.ToDouble(LearningRate.Value) * 1.0e-2;
 		Options.Epochs = Convert.ToInt32(Epochs.Value);
 		Options.Inputs = Convert.ToInt32(InputLayerNodes.Value);
 		Options.Categories = Convert.ToInt32(Categories.Value);
 		Options.Items = InputData.y;
 		Options.Nodes = Convert.ToInt32(HiddenLayerNodes.Value);
-		Options.Tolerance = Convert.ToDouble(Tolerance.Value) / 1.0e5;
+		Options.Tolerance = Convert.ToDouble(Tolerance.Value) * 1.0e-5;
 
 		if (UseOptimizer.Active)
 		{
