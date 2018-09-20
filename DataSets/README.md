@@ -6,7 +6,7 @@ Dimensions = 2
 Categories = 7
 Samples = 788
 
-![Aggregation](/Aggregation.png)
+![Aggregation](/DataSets/Aggregation.png)
 
 **Compound**
 
@@ -14,7 +14,7 @@ Dimensions = 2
 Categories = 6
 Samples = 399
 
-![Compound](/Compound.png)
+![Compound](/DataSets/Compound.png)
 
 **D31**
 
@@ -22,7 +22,7 @@ Dimensions = 2
 Categories = 31
 Samples = 3100
 
-![D31](/D31.png)
+![D31](/DataSets/D31.png)
 
 **Flame**
 
@@ -30,7 +30,7 @@ Dimensions = 2
 Categories = 2
 Samples = 240
 
-![Flame](/flame.png)
+![Flame](/DataSets/flame.png)
 
 **Iris**
 
@@ -38,7 +38,7 @@ Dimensions = 4
 Categories = 3
 Samples = 150
 
-![Iris](/Iris.png)
+![Iris](/DataSets/Iris.png)
 
 **Jain**
 
@@ -46,7 +46,7 @@ Dimensions = 2
 Categories = 2
 Samples = 373
 
-![Jain](/jain.png)
+![Jain](/DataSets/jain.png)
 
 **Path-based**
 
@@ -54,7 +54,7 @@ Dimensions = 2
 Categories = 3
 Samples = 300
 
-![Path-based](/pathbased.png)
+![Path-based](/DataSets/pathbased.png)
 
 **Primes**
 
@@ -64,7 +64,7 @@ Dimensions = 8
 Categories = 1 (binary, 0 or 1)
 Samples = 256
 
-![Primes](/primes.png)
+![Primes](/DataSets/primes.png)
 
 **R15**
 
@@ -72,7 +72,7 @@ Dimensions = 2
 Categories = 15
 Samples = 600
 
-![R15](/R15.png)
+![R15](/DataSets/R15.png)
 
 **Spiral**
 
@@ -82,7 +82,7 @@ Dimensions = 2
 Categories = 3
 Samples = 312
 
-![R15](/spiral.png)
+![R15](/DataSets/spiral.png)
 
 **XOR gate**
 
