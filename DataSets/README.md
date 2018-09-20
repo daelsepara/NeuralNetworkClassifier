@@ -1,6 +1,6 @@
 # Data Sets
 
-**Aggregation**
+## Aggregation
 
 ![Aggregation](/DataSets/Visualizations/Aggregation.png)
 
@@ -10,7 +10,7 @@ A. Gionis, H. Mannila, and P. Tsaparas, "Clustering aggregation". ACM Transactio
 * Categories = 7
 * Samples = 788
 
-**Compound**
+## Compound
 
 ![Compound](/DataSets/Visualizations/Compound.png)
 
@@ -20,7 +20,7 @@ C.T. Zahn, "Graph-theoretical methods for detecting and describing gestalt clust
 * Categories = 6
 * Samples = 399
 
-**D31**
+## D31
 
 ![D31](/DataSets/Visualizations/D31.png)
 
@@ -30,7 +30,7 @@ C.J. Veenman, M.J.T. Reinders, and E. Backer, "A maximum variance cluster algori
 * Categories = 31
 * Samples = 3100
 
-**Flame**
+## Flame
 
 ![Flame](/DataSets/Visualizations/flame.png)
 
@@ -40,7 +40,7 @@ L. Fu and E. Medico, "FLAME, a novel fuzzy clustering method for the analysis of
 * Categories = 2
 * Samples = 240
 
-**Iris**
+## Iris
 
 ![Iris](/DataSets/Visualizations/Iris.png)
 
@@ -50,7 +50,7 @@ R.A. Fisher, "The use of multiple measurements in taxonomic problems" Annual Eug
 * Categories = 3
 * Samples = 150
 
-**Jain**
+## Jain
 
 A. Jain and M. Law, "Data clustering: A user's dilemma". Lecture Notes in Computer Science, 2005. 3776: p. 1-10. 
 
@@ -60,7 +60,7 @@ A. Jain and M. Law, "Data clustering: A user's dilemma". Lecture Notes in Comput
 * Categories = 2
 * Samples = 373
 
-**Path-based**
+## Path-based
 
 ![Path-based](/DataSets/Visualizations/pathbased.png)
 
@@ -70,7 +70,7 @@ H. Chang and D.Y. Yeung, "Robust path-based spectral clustering". Pattern Recogn
 * Categories = 3
 * Samples = 300
 
-**Primes**
+## Primes
 
 ![Primes](/DataSets/Visualizations/primes.png)
 
@@ -80,7 +80,7 @@ Prime numbers in the range 0-255
 * Categories = 1 (binary, 0 or 1)
 * Samples = 256
 
-**R15**
+## R15
 
 ![R15](/DataSets/Visualizations/R15.png)
 
@@ -90,7 +90,7 @@ C.J. Veenman, M.J.T. Reinders, and E. Backer, "A maximum variance cluster algori
 * Categories = 15
 * Samples = 600
 
-**Spiral**
+## Spiral
 
 ![R15](/DataSets/Visualizations/spiral.png)
 
@@ -100,7 +100,7 @@ H. Chang and D.Y. Yeung, "Robust path-based spectral clustering". Pattern Recogn
 * Categories = 3
 * Samples = 312
 
-**XOR gate**
+## XOR gate
 
 * Dimensions = 2
 * Categories = 1 (binary, 0 or 1)
