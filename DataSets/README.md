@@ -10,7 +10,7 @@ P. Fränti and S. Sieranoja
 Applied Intelligence, 1-17, 2018
 https://doi.org/10.1007/s10489-018-1238-7
 
-I have generated the plots to accompany these data sets with R (Statistical computing programming language).
+I generated the plots (to accompany these data sets) using R (Statistical computing programming language).
 
 ## Aggregation
 
