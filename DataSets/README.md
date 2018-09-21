@@ -2,14 +2,16 @@
 
 Data sets for testing Neural Network Classifier software are available on this page. Each line in the text file is a single data point. The values in each line are separated by a delimiter character that is either a tab (\t) character or a comma (,). The last value in each line is the classification category of that data point.
 
-Citations for these data sets (except xor and primes) were adopted from: 
+Citations for these data sets (except iris, xor and primes) were adopted from: 
 
 http://cs.joensuu.fi/sipu/datasets/
 
 P. Fränti and S. Sieranoja
 Applied Intelligence, 1-17, 2018
 https://doi.org/10.1007/s10489-018-1238-7
- 
+
+I have generated the plots to accompany these data sets with R (Statistical computing programming language).
+
 ## Aggregation
 
 ![Aggregation](/DataSets/Visualizations/Aggregation.png)
