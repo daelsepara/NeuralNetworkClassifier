@@ -221,7 +221,7 @@ public partial class MainWindow : Gtk.Window
 
 								if (tokens.Length > 1)
 								{
-									var last = Convert.ToInt32(tokens[tokens.Length - 1], ci);
+									var last = SafeConvert.ToInt32(tokens[tokens.Length - 1]);
 
 									if (!categories.Contains(last) && last > 0)
 									{
@@ -239,7 +239,7 @@ public partial class MainWindow : Gtk.Window
 
 				if (isTraining && counter != null)
 				{
-					counter.Value = Convert.ToInt32(categories.Count, ci);
+					counter.Value = Convert.ToDouble(categories.Count, ci);
 				}
 
 				view.Buffer.Clear();
@@ -537,7 +537,7 @@ public partial class MainWindow : Gtk.Window
 			Text = text
 		};
 
-		Examples.Value = Convert.ToInt32(TrainingBuffer.LineCount, ci);
+		Examples.Value = Convert.ToDouble(TrainingBuffer.LineCount, ci);
 
 		var inpx = Convert.ToInt32(InputLayerNodes.Value, ci);
 		var inpy = Convert.ToInt32(Examples.Value, ci);
@@ -573,11 +573,11 @@ public partial class MainWindow : Gtk.Window
 
 					if (inputs > 0 && tokens.Length > inputs)
 					{
-						OutputData[0, y] = Convert.ToDouble(tokens[inputs], ci);
+						OutputData[0, y] = SafeConvert.ToDouble(tokens[inputs]);
 
 						for (int x = 0; x < inpx; x++)
 						{
-							var data = Convert.ToDouble(tokens[x], ci);
+							var data = SafeConvert.ToDouble(tokens[x]);
 
 							NormalizationData[x, min] = data < NormalizationData[x, min] ? data : NormalizationData[x, min];
 							NormalizationData[x, max] = data > NormalizationData[x, max] ? data : NormalizationData[x, max];
@@ -608,7 +608,7 @@ public partial class MainWindow : Gtk.Window
 			Text = text
 		};
 
-		Samples.Value = Convert.ToInt32(TestBuffer.LineCount, ci);
+		Samples.Value = Convert.ToDouble(TestBuffer.LineCount, ci);
 
 		var inpx = Convert.ToInt32(InputLayerNodes.Value, ci);
 		var tsty = Convert.ToInt32(Samples.Value, ci);
@@ -635,7 +635,7 @@ public partial class MainWindow : Gtk.Window
 					{
 						for (int x = 0; x < inpx; x++)
 						{
-							TestData[x, y] = Convert.ToDouble(tokens[x], ci);
+							TestData[x, y] = SafeConvert.ToDouble(tokens[x]);
 						}
 					}
 				}
@@ -721,7 +721,7 @@ public partial class MainWindow : Gtk.Window
 					{
 						if (x < tokens.Length)
 						{
-							Network.Wji[x, y] = Convert.ToDouble(tokens[x], ci);
+							Network.Wji[x, y] = SafeConvert.ToDouble(tokens[x]);
 						}
 					}
 				}
@@ -771,7 +771,7 @@ public partial class MainWindow : Gtk.Window
 					{
 						if (x < tokens.Length)
 						{
-							Network.Wkj[x, y] = Convert.ToDouble(tokens[x], ci);
+							Network.Wkj[x, y] = SafeConvert.ToDouble(tokens[x]);
 						}
 					}
 				}
@@ -821,7 +821,7 @@ public partial class MainWindow : Gtk.Window
 					{
 						if (x < tokens.Length)
 						{
-							NormalizationData[x, y] = Convert.ToDouble(tokens[x], ci);
+							NormalizationData[x, y] = SafeConvert.ToDouble(tokens[x]);
 						}
 					}
 				}
