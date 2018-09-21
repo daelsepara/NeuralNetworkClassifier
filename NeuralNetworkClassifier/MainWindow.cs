@@ -20,6 +20,7 @@ public partial class MainWindow : Gtk.Window
 
 	bool Paused = true;
 	bool NetworkSetuped;
+	bool NetworkLoaded;
 
 	Mutex Processing = new Mutex();
 
@@ -671,11 +672,11 @@ public partial class MainWindow : Gtk.Window
 
 		if (UseOptimizer.Active)
 		{
-			Network.SetupOptimizer(InputData, OutputData, Options);
+			Network.SetupOptimizer(InputData, OutputData, Options, true);
 		}
 		else
 		{
-			Network.Setup(OutputData, Options);
+			Network.Setup(OutputData, Options, true);
 		}
 
 		DataTrainingSet.Buffer.Text = training;
@@ -854,6 +855,31 @@ public partial class MainWindow : Gtk.Window
 		Options.Tolerance = Convert.ToDouble(Tolerance.Value, ci) / 1.0e5;
 
 		NetworkSetuped = SetupInputLayerWeights(inputLayer) && SetupHiddenLayerWeights(hiddenLayer) && SetupNormalization(normalization);
+
+		NetworkLoaded = NetworkSetuped;
+
+		if (UseOptimizer.Active)
+		{
+			Network.SetupOptimizer(InputData, OutputData, Options, false);
+		}
+		else
+		{
+			Network.Setup(OutputData, Options, false);
+		}
+
+		TrainingDone = false;
+
+		CurrentEpoch = 0;
+
+		UpdateTrainingDisplay();
+
+		Iterations.Text = "";
+		ErrorCost.Text = "";
+		TrainingProgress.Text = "";
+
+		TrainingDone = false;
+		UseOptimizer.Sensitive = true;
+		Epochs.Sensitive = true;
 	}
 
 	protected void Classify()
@@ -1000,6 +1026,8 @@ public partial class MainWindow : Gtk.Window
 
 				TrainingDone = true;
 
+				NetworkLoaded = false;
+
 				Classify();
 
 				UseOptimizer.Sensitive = true;
@@ -1091,7 +1119,7 @@ public partial class MainWindow : Gtk.Window
 		{
 			TrainingDone = false;
 
-			NetworkSetuped = false;
+			NetworkSetuped = false || NetworkLoaded;
 
 			CurrentEpoch = 0;
 		}
@@ -1099,6 +1127,7 @@ public partial class MainWindow : Gtk.Window
 		if (!NetworkSetuped)
 		{
 			Epochs.Sensitive = false;
+
 			UseOptimizer.Sensitive = false;
 
 			SetupNetworkTraining();
@@ -1137,6 +1166,8 @@ public partial class MainWindow : Gtk.Window
 		ErrorCost.Text = "";
 
 		NetworkSetuped = false;
+
+		NetworkLoaded = false;
 
 		TrainingDone = false;
 

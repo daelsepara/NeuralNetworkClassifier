@@ -5,7 +5,7 @@ public static class SafeConvert
 {
 	static readonly CultureInfo ci = new CultureInfo("en-us");
 
-    public static int ToInt32(string src)
+	public static int ToInt32(string src)
 	{
 		int result;
 
@@ -24,20 +24,20 @@ public static class SafeConvert
 	}
 
 	public static double ToDouble(string src)
-    {
-        double result;
+	{
+		double result;
 
-        try
-        {
+		try
+		{
 			result = Convert.ToDouble(src, ci);
-        }
-        catch (Exception ex)
-        {
-            Console.WriteLine("Unable to convert {0} to double: {1}", src, ex.Message);
+		}
+		catch (Exception ex)
+		{
+			Console.WriteLine("Unable to convert {0} to double: {1}", src, ex.Message);
 
-            result = 0.0;
-        }
+			result = 0.0;
+		}
 
-        return result;
-    }
+		return result;
+	}
 }
