@@ -76,6 +76,9 @@
     <Compile Include="Delimiter.cs" />
     <Compile Include="Optimize.cs" />
     <Compile Include="SafeConvert.cs" />
+    <Compile Include="Common.cs" />
+    <Compile Include="Plot.cs" />
+    <Compile Include="Conrec.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
 </Project>

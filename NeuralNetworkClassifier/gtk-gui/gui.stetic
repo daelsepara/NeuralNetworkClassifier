@@ -57,6 +57,19 @@
         <property name="Tooltip" translatable="yes">Load weights into network</property>
         <signal name="Activated" handler="OnLoadNetworkButtonClicked" />
       </action>
+      <action id="PlotButton">
+        <property name="Type">Action</property>
+        <property name="Label" translatable="yes" />
+        <property name="StockId">gtk-media-play</property>
+        <property name="Tooltip" translatable="yes">Plot</property>
+        <signal name="Activated" handler="OnPlotButtonClicked" />
+      </action>
+      <action id="SavePlotButton">
+        <property name="Type">Action</property>
+        <property name="Label" translatable="yes" />
+        <property name="StockId">gtk-save</property>
+        <property name="Tooltip" translatable="yes">Save plot as image</property>
+      </action>
     </action-group>
     <property name="MemberName" />
     <property name="WidthRequest">800</property>
@@ -95,7 +108,7 @@
             <property name="WidthRequest">720</property>
             <property name="HeightRequest">490</property>
             <property name="CanFocus">True</property>
-            <property name="CurrentPage">0</property>
+            <property name="CurrentPage">3</property>
             <signal name="SwitchPage" handler="OnMainNotebookSwitchPage" />
             <child>
               <widget class="Gtk.Fixed" id="LayoutPageData">
@@ -968,6 +981,128 @@
               </packing>
             </child>
             <child>
+              <widget class="Gtk.Fixed" id="LayoutPagePlot">
+                <property name="MemberName" />
+                <property name="HasWindow">False</property>
+                <child>
+                  <widget class="Gtk.Image" id="PlotImage">
+                    <property name="MemberName" />
+                    <property name="WidthRequest">400</property>
+                    <property name="HeightRequest">400</property>
+                  </widget>
+                  <packing>
+                    <property name="X">20</property>
+                    <property name="Y">20</property>
+                  </packing>
+                </child>
+                <child>
+                  <widget class="Gtk.Label" id="LabelPlotType">
+                    <property name="MemberName" />
+                    <property name="LabelProp" translatable="yes">&lt;b&gt;Plot type&lt;/b&gt;</property>
+                    <property name="UseMarkup">True</property>
+                  </widget>
+                  <packing>
+                    <property name="X">430</property>
+                    <property name="Y">20</property>
+                  </packing>
+                </child>
+                <child>
+                  <widget class="Gtk.ComboBox" id="PlotType">
+                    <property name="MemberName" />
+                    <property name="WidthRequest">240</property>
+                    <property name="IsTextCombo">True</property>
+                    <property name="Items" translatable="yes" />
+                  </widget>
+                  <packing>
+                    <property name="X">430</property>
+                    <property name="Y">50</property>
+                  </packing>
+                </child>
+                <child>
+                  <widget class="Gtk.Label" id="LabelX">
+                    <property name="MemberName" />
+                    <property name="LabelProp" translatable="yes">&lt;b&gt;X&lt;/b&gt;</property>
+                    <property name="UseMarkup">True</property>
+                  </widget>
+                  <packing>
+                    <property name="X">430</property>
+                    <property name="Y">90</property>
+                  </packing>
+                </child>
+                <child>
+                  <widget class="Gtk.SpinButton" id="Feature1">
+                    <property name="MemberName" />
+                    <property name="WidthRequest">100</property>
+                    <property name="CanFocus">True</property>
+                    <property name="Upper">100</property>
+                    <property name="PageIncrement">10</property>
+                    <property name="StepIncrement">1</property>
+                    <property name="ClimbRate">1</property>
+                    <property name="Numeric">True</property>
+                  </widget>
+                  <packing>
+                    <property name="X">430</property>
+                    <property name="Y">110</property>
+                  </packing>
+                </child>
+                <child>
+                  <widget class="Gtk.Label" id="LabelY">
+                    <property name="MemberName" />
+                    <property name="LabelProp" translatable="yes">&lt;b&gt;Y&lt;/b&gt;</property>
+                    <property name="UseMarkup">True</property>
+                  </widget>
+                  <packing>
+                    <property name="X">570</property>
+                    <property name="Y">90</property>
+                  </packing>
+                </child>
+                <child>
+                  <widget class="Gtk.SpinButton" id="Feature2">
+                    <property name="MemberName" />
+                    <property name="WidthRequest">100</property>
+                    <property name="CanFocus">True</property>
+                    <property name="Upper">100</property>
+                    <property name="PageIncrement">10</property>
+                    <property name="StepIncrement">1</property>
+                    <property name="ClimbRate">1</property>
+                    <property name="Numeric">True</property>
+                    <property name="Value">1</property>
+                  </widget>
+                  <packing>
+                    <property name="X">570</property>
+                    <property name="Y">110</property>
+                  </packing>
+                </child>
+                <child>
+                  <widget class="Gtk.Toolbar" id="PlotToolbar">
+                    <property name="MemberName" />
+                    <property name="ShowArrow">False</property>
+                    <property name="ButtonStyle">Icons</property>
+                    <node name="PlotToolbar" type="Toolbar">
+                      <node type="Toolitem" action="PlotButton" />
+                      <node type="Toolitem" action="SavePlotButton" />
+                    </node>
+                  </widget>
+                  <packing>
+                    <property name="X">430</property>
+                    <property name="Y">150</property>
+                  </packing>
+                </child>
+              </widget>
+              <packing>
+                <property name="Position">3</property>
+              </packing>
+            </child>
+            <child>
+              <widget class="Gtk.Label" id="LabelPagePlot">
+                <property name="MemberName" />
+                <property name="LabelProp" translatable="yes">Plot</property>
+              </widget>
+              <packing>
+                <property name="type">tab</property>
+              </packing>
+            </child>
+            <child>
               <widget class="Gtk.Fixed" id="LayoutPageAbout">
                 <property name="MemberName" />
                 <property name="HasWindow">False</property>
@@ -1063,7 +1198,7 @@ http://cs.joensuu.fi/sipu/datasets/</property>
                 </child>
               </widget>
               <packing>
-                <property name="Position">3</property>
+                <property name="Position">4</property>
               </packing>
             </child>
             <child>

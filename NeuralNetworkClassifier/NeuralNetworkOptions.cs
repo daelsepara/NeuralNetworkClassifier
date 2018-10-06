@@ -1,6 +1,6 @@
 namespace DeepLearnCS
 {
-	class NeuralNetworkOptions
+	public class NeuralNetworkOptions
 	{
 		public double Alpha;
 		public int Epochs;

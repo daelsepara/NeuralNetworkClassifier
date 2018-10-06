@@ -2,7 +2,7 @@ using System;
 
 namespace DeepLearnCS
 {
-	class ManagedNN
+	public class ManagedNN
 	{
 		public ManagedArray Wji;
 		public ManagedArray Wkj;
@@ -178,6 +178,42 @@ namespace DeepLearnCS
 
 			return result;
 		}
+
+		public ManagedArray Predict(ManagedArray test, NeuralNetworkOptions opts)
+        {
+            Forward(test);
+
+			var prediction = new ManagedArray(test.y);
+
+            for (int y = 0; y < test.y; y++)
+            {
+                if (opts.Categories > 1)
+                {
+					double maxval = Double.MinValue;
+
+                    for (int x = 0; x < opts.Categories; x++)
+                    {
+                        double val = Yk[x, y];
+
+                        if (val > maxval)
+                        {
+                            maxval = val;
+                        }
+                    }
+
+					prediction[y] = maxval;
+                }
+                else
+                {
+                    prediction[y] = Yk[y];
+                }
+            }
+
+            // cleanup of arrays allocated in Forward
+            ManagedOps.Free(A2, Yk, Z2);
+
+            return prediction;
+        }
 
 		public ManagedIntList Classify(ManagedArray test, NeuralNetworkOptions opts, double threshold = 0.5)
 		{

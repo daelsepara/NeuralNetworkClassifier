@@ -61,6 +61,23 @@ public partial class MainWindow : Gtk.Window
 		return filter;
 	}
 
+    protected void UpdatePlotTypes()
+    {
+        PlotType.Clear();
+
+        var cell = new CellRendererText();
+        PlotType.PackStart(cell, false);
+        PlotType.AddAttribute(cell, "text", 0);
+        var store = new ListStore(typeof(string));
+
+        PlotType.Model = store;
+
+        store.AppendValues("Data points");
+        store.AppendValues("Class boundaries");
+
+        PlotType.Active = 0;
+    }
+    
 	protected void InitializeUserInterface()
 	{
 		Title = "Neural Network Classifier";
@@ -114,6 +131,10 @@ public partial class MainWindow : Gtk.Window
 
 		UpdateDelimiterBox(DelimiterBox, Delimiters);
 
+        UpdatePlotTypes();
+        
+        PlotImage.Pixbuf = Common.Pixbuf(PlotImage.WidthRequest, PlotImage.HeightRequest);
+
 		ToggleControls(Paused);
 
 		Idle.Add(new IdleHandler(OnIdle));
@@ -160,6 +181,12 @@ public partial class MainWindow : Gtk.Window
 		SaveNormalization.Sensitive = toggle;
 
 		LoadNetworkButton.Sensitive = toggle;
+
+        PlotType.Sensitive = toggle;
+        Feature1.Sensitive = toggle;
+        Feature2.Sensitive = toggle;
+        PlotButton.Sensitive = toggle;
+        SavePlotButton.Sensitive = toggle;
 	}
 
 	protected void Pause()
@@ -955,6 +982,65 @@ public partial class MainWindow : Gtk.Window
 		}
 	}
 
+    protected void CopyToImage(Gtk.Image image, Pixbuf pixbuf, int OriginX, int OriginY)
+    {
+        if (pixbuf != null && image.Pixbuf != null)
+        {
+            image.Pixbuf.Fill(0);
+
+            pixbuf.CopyArea(OriginX, OriginY, Math.Min(image.WidthRequest, pixbuf.Width), Math.Min(image.HeightRequest, pixbuf.Height), image.Pixbuf, 0, 0);
+
+            image.QueueDraw();
+        }
+    }
+    
+    protected void PlotNetwork(int f1 = 0, int f2 = 1)
+    {
+        var test = DataTestSet.Buffer.Text.Trim();
+
+        if (string.IsNullOrEmpty(test))
+            return;
+
+        var type = PlotType.Active;
+        
+        if (NetworkSetuped && SetupTestData(test) && type >= 0 && type < 2)
+        {
+            var TestOptions = Options;
+
+            TestOptions.Items = TestData.y;
+
+            Pixbuf pixbuf;
+
+            switch (type)
+            {
+                case 0:
+
+                    pixbuf = Plot.Points(Network, TestOptions, Threshold.Value / 100, TestData, PlotImage.WidthRequest, PlotImage.HeightRequest, f1, f2);
+
+                    break;
+
+                case 1:
+
+                    pixbuf = Plot.Contour(Network, TestOptions, Threshold.Value / 100, TestData, PlotImage.WidthRequest, PlotImage.HeightRequest, f1, f2);
+
+                    break;
+
+                default:
+
+                    pixbuf = Plot.Points(Network, TestOptions, Threshold.Value / 100, TestData, PlotImage.WidthRequest, PlotImage.HeightRequest, f1, f2);
+
+                    break;
+            }
+
+            if (pixbuf != null)
+            {
+                CopyToImage(PlotImage, pixbuf, 0, 0);
+
+                Common.Free(pixbuf);
+            }
+        }
+    }
+    
 	protected bool GetConfirmation()
 	{
 		var confirm = Confirm.Run() == (int)ResponseType.Accept;
@@ -970,6 +1056,11 @@ public partial class MainWindow : Gtk.Window
 		Network.Free();
 
 		ManagedOps.Free(InputData, OutputData, TestData, NormalizationData);
+        
+        Common.Free(PlotImage.Pixbuf);
+        Common.Free(PlotImage);
+
+        Plot.Free();
 	}
 
 	protected void Quit()
@@ -1284,4 +1375,24 @@ public partial class MainWindow : Gtk.Window
 	{
 		MainNotebook.Page = (int)Pages.ABOUT;
 	}
+
+
+    protected void OnPlotButtonClicked(object sender, EventArgs e)
+    {
+        if (!Paused)
+            return;
+
+        var feature1 = Convert.ToInt32(Feature1.Value);
+        var feature2 = Convert.ToInt32(Feature2.Value);
+        var features = Convert.ToInt32(InputLayerNodes.Value);
+
+        if (feature1 >= 0 && feature1 < features && feature2 >= 0 && feature2 < features && feature1 != feature2)
+        {
+            ToggleControls(false);
+
+            PlotNetwork(feature1, feature2);
+            
+            ToggleControls(true);
+        }
+    }
 }
