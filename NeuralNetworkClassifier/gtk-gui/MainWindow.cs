@@ -267,7 +267,7 @@ public partial class MainWindow
 		this.MainNotebook.HeightRequest = 490;
 		this.MainNotebook.CanFocus = true;
 		this.MainNotebook.Name = "MainNotebook";
-		this.MainNotebook.CurrentPage = 3;
+		this.MainNotebook.CurrentPage = 0;
 		// Container child MainNotebook.Gtk.Notebook+NotebookChild
 		this.LayoutPageData = new global::Gtk.Fixed();
 		this.LayoutPageData.Name = "LayoutPageData";
@@ -1146,6 +1146,7 @@ http://cs.joensuu.fi/sipu/datasets/");
 		this.ClassifyButton.Activated += new global::System.EventHandler(this.OnClassifyButtonClicked);
 		this.LoadNetworkButton.Activated += new global::System.EventHandler(this.OnLoadNetworkButtonClicked);
 		this.PlotButton.Activated += new global::System.EventHandler(this.OnPlotButtonClicked);
+		this.SavePlotButton.Activated += new global::System.EventHandler(this.OnSavePlotButtonClicked);
 		this.MainNotebook.SwitchPage += new global::Gtk.SwitchPageHandler(this.OnMainNotebookSwitchPage);
 		this.OpenTrainingSet.Clicked += new global::System.EventHandler(this.OnOpenTrainingSetClicked);
 		this.OpenTestSet.Clicked += new global::System.EventHandler(this.OnOpenTestSetClicked);

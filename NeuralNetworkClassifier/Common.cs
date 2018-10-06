@@ -93,21 +93,21 @@ public static class Common
 	}
 
 	// Fisher–Yates shuffle algorithm
-    public static void Shuffle<T>(this T[] list)
-    {
-        int n = list.Length;
+	public static void Shuffle<T>(this T[] list)
+	{
+		int n = list.Length;
 
-        for (int i = list.Length - 1; i > 1; i--)
-        {
-            int rnd = random.Next(i + 1);
+		for (int i = list.Length - 1; i > 1; i--)
+		{
+			int rnd = random.Next(i + 1);
 
-            T value = list[rnd];
+			T value = list[rnd];
 
-            list[rnd] = list[i];
+			list[rnd] = list[i];
 
-            list[i] = value;
-        }
-    }
+			list[i] = value;
+		}
+	}
 
 	public static Pixbuf Pixbuf(int width, int height)
 	{
@@ -133,22 +133,36 @@ public static class Common
 		}
 	}
 
-	public static void Circle(Pixbuf pixbuf, int xc, int yc, int x, int y, Color color)
+	public static void Circle(Pixbuf pixbuf, int xc, int yc, int x, int y, Color color, bool filled = false)
 	{
-		for (var i = xc - x; i <= xc + x; i++)
-			Common.Point(pixbuf, i, yc + y, color);
+		if (filled)
+		{
+			for (var i = xc - x; i <= xc + x; i++)
+				Point(pixbuf, i, yc + y, color);
 
-		for (var i = xc - x; i <= xc + x; i++)
-			Common.Point(pixbuf, i, yc - y, color);
+			for (var i = xc - x; i <= xc + x; i++)
+				Point(pixbuf, i, yc - y, color);
 
-		for (var i = xc - y; i <= xc + y; i++)
-			Common.Point(pixbuf, i, yc + x, color);
+			for (var i = xc - y; i <= xc + y; i++)
+				Point(pixbuf, i, yc + x, color);
 
-		for (var i = xc - y; i <= xc + y; i++)
-			Common.Point(pixbuf, i, yc - x, color);
+			for (var i = xc - y; i <= xc + y; i++)
+				Point(pixbuf, i, yc - x, color);
+		}
+		else
+		{
+			Point(pixbuf, xc - x, yc + y, color);
+			Point(pixbuf, xc + x, yc + y, color);
+			Point(pixbuf, xc - x, yc - y, color);
+			Point(pixbuf, xc + x, yc - y, color);
+			Point(pixbuf, xc - y, yc + x, color);
+			Point(pixbuf, xc + y, yc + x, color);
+			Point(pixbuf, xc - y, yc - x, color);
+			Point(pixbuf, xc + y, yc - x, color);
+		}
 	}
 
-	public static void Circle(Pixbuf pixbuf, int xc, int yc, int r, Color c)
+	public static void Circle(Pixbuf pixbuf, int xc, int yc, int r, Color c, bool filled = false)
 	{
 		int x = 0, y = r;
 		int d = 3 - 2 * r;
@@ -157,7 +171,7 @@ public static class Common
 		{
 			// for each pixel we will 
 			// draw all eight pixels 
-			Circle(pixbuf, xc, yc, x, y, c);
+			Circle(pixbuf, xc, yc, x, y, c, filled);
 
 			x++;
 
@@ -167,24 +181,24 @@ public static class Common
 			if (d > 0)
 			{
 				y--;
+
 				d = d + 4 * (x - y) + 10;
 			}
 			else
 				d = d + 4 * x + 6;
 
-			Circle(pixbuf, xc, yc, x, y, c);
+			Circle(pixbuf, xc, yc, x, y, c, filled);
 		}
 	}
 
 	public static void Line(Pixbuf pixbuf, int x0, int y0, int x1, int y1, Color color)
 	{
 		int dx = Math.Abs(x1 - x0), sx = x0 < x1 ? 1 : -1;
-
 		int dy = Math.Abs(y1 - y0), sy = y0 < y1 ? 1 : -1;
 
 		int err = (dx > dy ? dx : -dy) / 2, e2;
 
-		for (; ; )
+		while (true)
 		{
 			Point(pixbuf, x0, y0, color);
 

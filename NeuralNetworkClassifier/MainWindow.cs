@@ -12,7 +12,7 @@ public partial class MainWindow : Gtk.Window
 {
 	Dialog Confirm;
 
-	FileChooserDialog TextSaver, TextLoader;
+	FileChooserDialog TextSaver, TextLoader, ImageSaver;
 	String TrainingSetFileName, TestSetFileName;
 	String WJIFileName, WKJFileName, NormalizationFileName;
 
@@ -33,6 +33,8 @@ public partial class MainWindow : Gtk.Window
 	ManagedArray OutputData = new ManagedArray();
 	ManagedArray TestData = new ManagedArray();
 	ManagedArray NormalizationData = new ManagedArray();
+
+	string FileName;
 
 	CultureInfo ci = new CultureInfo("en-us");
 
@@ -61,23 +63,23 @@ public partial class MainWindow : Gtk.Window
 		return filter;
 	}
 
-    protected void UpdatePlotTypes()
-    {
-        PlotType.Clear();
+	protected void UpdatePlotTypes()
+	{
+		PlotType.Clear();
 
-        var cell = new CellRendererText();
-        PlotType.PackStart(cell, false);
-        PlotType.AddAttribute(cell, "text", 0);
-        var store = new ListStore(typeof(string));
+		var cell = new CellRendererText();
+		PlotType.PackStart(cell, false);
+		PlotType.AddAttribute(cell, "text", 0);
+		var store = new ListStore(typeof(string));
 
-        PlotType.Model = store;
+		PlotType.Model = store;
 
-        store.AppendValues("Data points");
-        store.AppendValues("Class boundaries");
+		store.AppendValues("Data points");
+		store.AppendValues("Class boundaries");
 
-        PlotType.Active = 0;
-    }
-    
+		PlotType.Active = 0;
+	}
+
 	protected void InitializeUserInterface()
 	{
 		Title = "Neural Network Classifier";
@@ -110,13 +112,20 @@ public partial class MainWindow : Gtk.Window
 		TextLoader = new FileChooserDialog(
 			"Load Text File",
 			this,
-			FileChooserAction.Save,
+			FileChooserAction.Open,
 			"Cancel", ResponseType.Cancel,
 			"Load", ResponseType.Accept
 		);
 
-		TextLoader.AddFilter(AddFilter("Text files (csv/txt)", "*.txt", "*.csv"));
+		ImageSaver = new FileChooserDialog(
+			"Save Filtered Image",
+			this,
+			FileChooserAction.Save,
+			"Cancel", ResponseType.Cancel,
+			"Save", ResponseType.Accept
+		);
 
+		TextLoader.AddFilter(AddFilter("Text files (csv/txt)", "*.txt", "*.csv"));
 		TextSaver.AddFilter(AddFilter("txt", "*.txt"));
 		TextSaver.AddFilter(AddFilter("csv", "*.csv"));
 
@@ -129,11 +138,18 @@ public partial class MainWindow : Gtk.Window
 		Delimiters.Add(new Delimiter("Forward Slash /", '/'));
 		Delimiters.Add(new Delimiter("Backward Slash \\", '\\'));
 
+		ImageSaver.AddFilter(AddFilter("png", "*.png"));
+		ImageSaver.AddFilter(AddFilter("jpg", "*.jpg", "*.jpeg"));
+		ImageSaver.AddFilter(AddFilter("tif", "*.tif", "*.tiff"));
+		ImageSaver.AddFilter(AddFilter("bmp", "*.bmp"));
+		ImageSaver.AddFilter(AddFilter("ico", "*.ico"));
+		ImageSaver.Filter = ImageSaver.Filters[0];
+
 		UpdateDelimiterBox(DelimiterBox, Delimiters);
 
-        UpdatePlotTypes();
-        
-        PlotImage.Pixbuf = Common.Pixbuf(PlotImage.WidthRequest, PlotImage.HeightRequest);
+		UpdatePlotTypes();
+
+		PlotImage.Pixbuf = Common.Pixbuf(PlotImage.WidthRequest, PlotImage.HeightRequest);
 
 		ToggleControls(Paused);
 
@@ -182,11 +198,11 @@ public partial class MainWindow : Gtk.Window
 
 		LoadNetworkButton.Sensitive = toggle;
 
-        PlotType.Sensitive = toggle;
-        Feature1.Sensitive = toggle;
-        Feature2.Sensitive = toggle;
-        PlotButton.Sensitive = toggle;
-        SavePlotButton.Sensitive = toggle;
+		PlotType.Sensitive = toggle;
+		Feature1.Sensitive = toggle;
+		Feature2.Sensitive = toggle;
+		PlotButton.Sensitive = toggle;
+		SavePlotButton.Sensitive = toggle;
 	}
 
 	protected void Pause()
@@ -437,6 +453,99 @@ public partial class MainWindow : Gtk.Window
 		}
 
 		TextSaver.Hide();
+	}
+
+	protected string GetFileName(string fullpath)
+	{
+		return System.IO.Path.GetFileNameWithoutExtension(fullpath);
+	}
+
+	protected string GetName(string fullpath)
+	{
+		return System.IO.Path.GetFileName(fullpath);
+	}
+
+	protected void SavePlot()
+	{
+		ImageSaver.Title = "Save plot";
+
+		string directory;
+
+		// Add most recent directory
+		if (!string.IsNullOrEmpty(ImageSaver.Filename))
+		{
+			directory = GetDirectory(ImageSaver.Filename);
+
+			if (Directory.Exists(directory))
+			{
+				ImageSaver.SetCurrentFolder(directory);
+			}
+		}
+
+		if (ImageSaver.Run() == (int)ResponseType.Accept)
+		{
+			if (!string.IsNullOrEmpty(ImageSaver.Filename))
+			{
+				FileName = ImageSaver.Filename;
+
+				directory = GetDirectory(FileName);
+
+				var ext = ImageSaver.Filter.Name;
+
+				var fmt = ext;
+
+				switch (ext)
+				{
+					case "jpg":
+
+						if (!FileName.EndsWith(".jpg", StringComparison.OrdinalIgnoreCase) && !FileName.EndsWith(".jpeg", StringComparison.OrdinalIgnoreCase))
+						{
+							FileName = String.Format("{0}.jpg", GetFileName(FileName));
+						}
+
+						fmt = "jpeg";
+
+						break;
+
+					case "tif":
+
+						if (!FileName.EndsWith(".tif", StringComparison.OrdinalIgnoreCase) && !FileName.EndsWith(".tiff", StringComparison.OrdinalIgnoreCase))
+						{
+							FileName = String.Format("{0}.tif", GetFileName(FileName));
+						}
+
+						fmt = "tiff";
+
+						break;
+
+					default:
+
+						FileName = String.Format("{0}.{1}", GetFileName(FileName), ext);
+
+						break;
+				}
+
+				if (PlotImage.Pixbuf != null)
+				{
+					FileName = GetName(FileName);
+
+					var fullpath = String.Format("{0}/{1}", directory, FileName);
+
+					try
+					{
+						PlotImage.Pixbuf.Save(fullpath, fmt);
+
+						FileName = fullpath;
+					}
+					catch (Exception ex)
+					{
+						Console.WriteLine("Error saving {0}: {1}", FileName, ex.Message);
+					}
+				}
+			}
+		}
+
+		ImageSaver.Hide();
 	}
 
 	protected void UpdateDelimiterBox(ComboBox combo, List<Delimiter> delimeters)
@@ -982,65 +1091,65 @@ public partial class MainWindow : Gtk.Window
 		}
 	}
 
-    protected void CopyToImage(Gtk.Image image, Pixbuf pixbuf, int OriginX, int OriginY)
-    {
-        if (pixbuf != null && image.Pixbuf != null)
-        {
-            image.Pixbuf.Fill(0);
+	protected void CopyToImage(Gtk.Image image, Pixbuf pixbuf, int OriginX, int OriginY)
+	{
+		if (pixbuf != null && image.Pixbuf != null)
+		{
+			image.Pixbuf.Fill(0);
 
-            pixbuf.CopyArea(OriginX, OriginY, Math.Min(image.WidthRequest, pixbuf.Width), Math.Min(image.HeightRequest, pixbuf.Height), image.Pixbuf, 0, 0);
+			pixbuf.CopyArea(OriginX, OriginY, Math.Min(image.WidthRequest, pixbuf.Width), Math.Min(image.HeightRequest, pixbuf.Height), image.Pixbuf, 0, 0);
 
-            image.QueueDraw();
-        }
-    }
-    
-    protected void PlotNetwork(int f1 = 0, int f2 = 1)
-    {
-        var test = DataTestSet.Buffer.Text.Trim();
+			image.QueueDraw();
+		}
+	}
 
-        if (string.IsNullOrEmpty(test))
-            return;
+	protected void PlotNetwork(int f1 = 0, int f2 = 1)
+	{
+		var test = DataTestSet.Buffer.Text.Trim();
 
-        var type = PlotType.Active;
-        
-        if (NetworkSetuped && SetupTestData(test) && type >= 0 && type < 2)
-        {
-            var TestOptions = Options;
+		if (string.IsNullOrEmpty(test))
+			return;
 
-            TestOptions.Items = TestData.y;
+		var type = PlotType.Active;
 
-            Pixbuf pixbuf;
+		if (NetworkSetuped && SetupTestData(test) && type >= 0 && type < 2)
+		{
+			var TestOptions = Options;
 
-            switch (type)
-            {
-                case 0:
+			TestOptions.Items = TestData.y;
 
-                    pixbuf = Plot.Points(Network, TestOptions, Threshold.Value / 100, TestData, PlotImage.WidthRequest, PlotImage.HeightRequest, f1, f2);
+			Pixbuf pixbuf;
 
-                    break;
+			switch (type)
+			{
+				case 0:
 
-                case 1:
+					pixbuf = Plot.Points(Network, TestOptions, Threshold.Value / 100, TestData, PlotImage.WidthRequest, PlotImage.HeightRequest, f1, f2);
 
-                    pixbuf = Plot.Contour(Network, TestOptions, Threshold.Value / 100, TestData, PlotImage.WidthRequest, PlotImage.HeightRequest, f1, f2);
+					break;
 
-                    break;
+				case 1:
 
-                default:
+					pixbuf = Plot.Contour(Network, TestOptions, Threshold.Value / 100, TestData, PlotImage.WidthRequest, PlotImage.HeightRequest, f1, f2);
 
-                    pixbuf = Plot.Points(Network, TestOptions, Threshold.Value / 100, TestData, PlotImage.WidthRequest, PlotImage.HeightRequest, f1, f2);
+					break;
 
-                    break;
-            }
+				default:
 
-            if (pixbuf != null)
-            {
-                CopyToImage(PlotImage, pixbuf, 0, 0);
+					pixbuf = Plot.Points(Network, TestOptions, Threshold.Value / 100, TestData, PlotImage.WidthRequest, PlotImage.HeightRequest, f1, f2);
 
-                Common.Free(pixbuf);
-            }
-        }
-    }
-    
+					break;
+			}
+
+			if (pixbuf != null)
+			{
+				CopyToImage(PlotImage, pixbuf, 0, 0);
+
+				Common.Free(pixbuf);
+			}
+		}
+	}
+
 	protected bool GetConfirmation()
 	{
 		var confirm = Confirm.Run() == (int)ResponseType.Accept;
@@ -1056,11 +1165,11 @@ public partial class MainWindow : Gtk.Window
 		Network.Free();
 
 		ManagedOps.Free(InputData, OutputData, TestData, NormalizationData);
-        
-        Common.Free(PlotImage.Pixbuf);
-        Common.Free(PlotImage);
 
-        Plot.Free();
+		Common.Free(PlotImage.Pixbuf);
+		Common.Free(PlotImage);
+
+		Plot.Free();
 	}
 
 	protected void Quit()
@@ -1377,22 +1486,30 @@ public partial class MainWindow : Gtk.Window
 	}
 
 
-    protected void OnPlotButtonClicked(object sender, EventArgs e)
-    {
-        if (!Paused)
-            return;
+	protected void OnPlotButtonClicked(object sender, EventArgs e)
+	{
+		if (!Paused)
+			return;
 
-        var feature1 = Convert.ToInt32(Feature1.Value);
-        var feature2 = Convert.ToInt32(Feature2.Value);
-        var features = Convert.ToInt32(InputLayerNodes.Value);
+		var feature1 = Convert.ToInt32(Feature1.Value);
+		var feature2 = Convert.ToInt32(Feature2.Value);
+		var features = Convert.ToInt32(InputLayerNodes.Value);
 
-        if (feature1 >= 0 && feature1 < features && feature2 >= 0 && feature2 < features && feature1 != feature2)
-        {
-            ToggleControls(false);
+		if (feature1 >= 0 && feature1 < features && feature2 >= 0 && feature2 < features && feature1 != feature2)
+		{
+			ToggleControls(false);
 
-            PlotNetwork(feature1, feature2);
-            
-            ToggleControls(true);
-        }
-    }
+			PlotNetwork(feature1, feature2);
+
+			ToggleControls(true);
+		}
+	}
+
+	protected void OnSavePlotButtonClicked(object sender, EventArgs e)
+	{
+		if (!Paused)
+			return;
+
+		SavePlot();
+	}
 }

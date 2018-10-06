@@ -35,7 +35,7 @@ public static class Plot
 					var xp = (int)((x[f1, i] - minx) / deltax);
 					var yp = (int)((x[f2, i] - miny) / deltay);
 
-					Common.Circle(pixbuf, xp, yp, 2, colors[c[i] % colors.Length]);
+					Common.Circle(pixbuf, xp, yp, 2, colors[c[i] % colors.Length], true);
 				}
 			}
 		}

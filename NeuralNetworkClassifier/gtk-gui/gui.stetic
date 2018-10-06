@@ -69,6 +69,7 @@
         <property name="Label" translatable="yes" />
         <property name="StockId">gtk-save</property>
         <property name="Tooltip" translatable="yes">Save plot as image</property>
+        <signal name="Activated" handler="OnSavePlotButtonClicked" />
       </action>
     </action-group>
     <property name="MemberName" />
@@ -108,7 +109,7 @@
             <property name="WidthRequest">720</property>
             <property name="HeightRequest">490</property>
             <property name="CanFocus">True</property>
-            <property name="CurrentPage">3</property>
+            <property name="CurrentPage">0</property>
             <signal name="SwitchPage" handler="OnMainNotebookSwitchPage" />
             <child>
               <widget class="Gtk.Fixed" id="LayoutPageData">
