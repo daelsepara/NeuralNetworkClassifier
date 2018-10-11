@@ -43,7 +43,8 @@ public partial class MainWindow : Gtk.Window
 		DATA = 0,
 		TRAINING = 1,
 		NETWORK = 2,
-		ABOUT = 3
+		PLOT = 3,
+		ABOUT = 4
 	};
 
 	public MainWindow() : base(Gtk.WindowType.Toplevel)
