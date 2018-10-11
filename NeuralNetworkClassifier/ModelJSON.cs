@@ -192,7 +192,14 @@ public static class Utility
 		{
 			var temp = Set(model.Normalization);
 
-			normalization.Resize(temp);
+			if (normalization == null)
+			{
+				normalization = new ManagedArray(temp);
+			}
+			else
+			{
+				normalization.Resize(temp);
+			}
 
 			ManagedOps.Copy2D(normalization, temp, 0, 0);
 
