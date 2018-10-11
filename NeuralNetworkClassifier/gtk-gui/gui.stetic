@@ -909,7 +909,6 @@
                   <widget class="Gtk.Entry" id="NormalizationFile">
                     <property name="MemberName" />
                     <property name="WidthRequest">230</property>
-                    <property name="CanFocus">True</property>
                     <property name="IsEditable">True</property>
                     <property name="InvisibleChar">•</property>
                   </widget>
@@ -964,6 +963,59 @@
                   </widget>
                   <packing>
                     <property name="X">290</property>
+                    <property name="Y">250</property>
+                  </packing>
+                </child>
+                <child>
+                  <widget class="Gtk.Label" id="LabelNetwork">
+                    <property name="MemberName" />
+                    <property name="LabelProp" translatable="yes">&lt;b&gt;Network&lt;/b&gt;</property>
+                    <property name="UseMarkup">True</property>
+                  </widget>
+                  <packing>
+                    <property name="X">370</property>
+                    <property name="Y">230</property>
+                  </packing>
+                </child>
+                <child>
+                  <widget class="Gtk.Entry" id="NetworkFile">
+                    <property name="MemberName" />
+                    <property name="WidthRequest">230</property>
+                    <property name="IsEditable">True</property>
+                    <property name="InvisibleChar">•</property>
+                  </widget>
+                  <packing>
+                    <property name="X">370</property>
+                    <property name="Y">250</property>
+                  </packing>
+                </child>
+                <child>
+                  <widget class="Gtk.Button" id="OpenNetworkButton">
+                    <property name="MemberName" />
+                    <property name="CanFocus">True</property>
+                    <property name="Type">TextAndIcon</property>
+                    <property name="Icon">stock:gtk-open Menu</property>
+                    <property name="Label" translatable="yes" />
+                    <property name="FocusOnClick">False</property>
+                    <signal name="Clicked" handler="OnOpenNetworkButtonClicked" />
+                  </widget>
+                  <packing>
+                    <property name="X">610</property>
+                    <property name="Y">250</property>
+                  </packing>
+                </child>
+                <child>
+                  <widget class="Gtk.Button" id="SaveNetworkButton">
+                    <property name="MemberName" />
+                    <property name="CanFocus">True</property>
+                    <property name="Type">TextAndIcon</property>
+                    <property name="Icon">stock:gtk-save Menu</property>
+                    <property name="Label" translatable="yes" />
+                    <property name="FocusOnClick">False</property>
+                    <signal name="Clicked" handler="OnSaveNetworkButtonClicked" />
+                  </widget>
+                  <packing>
+                    <property name="X">640</property>
                     <property name="Y">250</property>
                   </packing>
                 </child>

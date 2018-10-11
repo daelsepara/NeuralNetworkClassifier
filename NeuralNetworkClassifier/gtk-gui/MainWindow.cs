@@ -169,6 +169,14 @@ public partial class MainWindow
 
 	private global::Gtk.Button SaveNormalization;
 
+	private global::Gtk.Label LabelNetwork;
+
+	private global::Gtk.Entry NetworkFile;
+
+	private global::Gtk.Button OpenNetworkButton;
+
+	private global::Gtk.Button SaveNetworkButton;
+
 	private global::Gtk.Label LabelPageNetwork;
 
 	private global::Gtk.Fixed LayoutPagePlot;
@@ -267,7 +275,7 @@ public partial class MainWindow
 		this.MainNotebook.HeightRequest = 490;
 		this.MainNotebook.CanFocus = true;
 		this.MainNotebook.Name = "MainNotebook";
-		this.MainNotebook.CurrentPage = 0;
+		this.MainNotebook.CurrentPage = 2;
 		// Container child MainNotebook.Gtk.Notebook+NotebookChild
 		this.LayoutPageData = new global::Gtk.Fixed();
 		this.LayoutPageData.Name = "LayoutPageData";
@@ -890,7 +898,6 @@ public partial class MainWindow
 		// Container child LayoutPageNetwork.Gtk.Fixed+FixedChild
 		this.NormalizationFile = new global::Gtk.Entry();
 		this.NormalizationFile.WidthRequest = 230;
-		this.NormalizationFile.CanFocus = true;
 		this.NormalizationFile.Name = "NormalizationFile";
 		this.NormalizationFile.IsEditable = true;
 		this.NormalizationFile.InvisibleChar = '•';
@@ -936,9 +943,52 @@ public partial class MainWindow
 		global::Gtk.Fixed.FixedChild w79 = ((global::Gtk.Fixed.FixedChild)(this.LayoutPageNetwork[this.SaveNormalization]));
 		w79.X = 290;
 		w79.Y = 250;
+		// Container child LayoutPageNetwork.Gtk.Fixed+FixedChild
+		this.LabelNetwork = new global::Gtk.Label();
+		this.LabelNetwork.Name = "LabelNetwork";
+		this.LabelNetwork.LabelProp = global::Mono.Unix.Catalog.GetString("<b>Network</b>");
+		this.LabelNetwork.UseMarkup = true;
+		this.LayoutPageNetwork.Add(this.LabelNetwork);
+		global::Gtk.Fixed.FixedChild w80 = ((global::Gtk.Fixed.FixedChild)(this.LayoutPageNetwork[this.LabelNetwork]));
+		w80.X = 370;
+		w80.Y = 230;
+		// Container child LayoutPageNetwork.Gtk.Fixed+FixedChild
+		this.NetworkFile = new global::Gtk.Entry();
+		this.NetworkFile.WidthRequest = 230;
+		this.NetworkFile.Name = "NetworkFile";
+		this.NetworkFile.IsEditable = true;
+		this.NetworkFile.InvisibleChar = '•';
+		this.LayoutPageNetwork.Add(this.NetworkFile);
+		global::Gtk.Fixed.FixedChild w81 = ((global::Gtk.Fixed.FixedChild)(this.LayoutPageNetwork[this.NetworkFile]));
+		w81.X = 370;
+		w81.Y = 250;
+		// Container child LayoutPageNetwork.Gtk.Fixed+FixedChild
+		this.OpenNetworkButton = new global::Gtk.Button();
+		this.OpenNetworkButton.CanFocus = true;
+		this.OpenNetworkButton.Name = "OpenNetworkButton";
+		this.OpenNetworkButton.FocusOnClick = false;
+		global::Gtk.Image w82 = new global::Gtk.Image();
+		w82.Pixbuf = global::Stetic.IconLoader.LoadIcon(this, "gtk-open", global::Gtk.IconSize.Menu);
+		this.OpenNetworkButton.Image = w82;
+		this.LayoutPageNetwork.Add(this.OpenNetworkButton);
+		global::Gtk.Fixed.FixedChild w83 = ((global::Gtk.Fixed.FixedChild)(this.LayoutPageNetwork[this.OpenNetworkButton]));
+		w83.X = 610;
+		w83.Y = 250;
+		// Container child LayoutPageNetwork.Gtk.Fixed+FixedChild
+		this.SaveNetworkButton = new global::Gtk.Button();
+		this.SaveNetworkButton.CanFocus = true;
+		this.SaveNetworkButton.Name = "SaveNetworkButton";
+		this.SaveNetworkButton.FocusOnClick = false;
+		global::Gtk.Image w84 = new global::Gtk.Image();
+		w84.Pixbuf = global::Stetic.IconLoader.LoadIcon(this, "gtk-save", global::Gtk.IconSize.Menu);
+		this.SaveNetworkButton.Image = w84;
+		this.LayoutPageNetwork.Add(this.SaveNetworkButton);
+		global::Gtk.Fixed.FixedChild w85 = ((global::Gtk.Fixed.FixedChild)(this.LayoutPageNetwork[this.SaveNetworkButton]));
+		w85.X = 640;
+		w85.Y = 250;
 		this.MainNotebook.Add(this.LayoutPageNetwork);
-		global::Gtk.Notebook.NotebookChild w80 = ((global::Gtk.Notebook.NotebookChild)(this.MainNotebook[this.LayoutPageNetwork]));
-		w80.Position = 2;
+		global::Gtk.Notebook.NotebookChild w86 = ((global::Gtk.Notebook.NotebookChild)(this.MainNotebook[this.LayoutPageNetwork]));
+		w86.Position = 2;
 		// Notebook tab
 		this.LabelPageNetwork = new global::Gtk.Label();
 		this.LabelPageNetwork.Name = "LabelPageNetwork";
@@ -955,35 +1005,35 @@ public partial class MainWindow
 		this.PlotImage.HeightRequest = 400;
 		this.PlotImage.Name = "PlotImage";
 		this.LayoutPagePlot.Add(this.PlotImage);
-		global::Gtk.Fixed.FixedChild w81 = ((global::Gtk.Fixed.FixedChild)(this.LayoutPagePlot[this.PlotImage]));
-		w81.X = 20;
-		w81.Y = 20;
+		global::Gtk.Fixed.FixedChild w87 = ((global::Gtk.Fixed.FixedChild)(this.LayoutPagePlot[this.PlotImage]));
+		w87.X = 20;
+		w87.Y = 20;
 		// Container child LayoutPagePlot.Gtk.Fixed+FixedChild
 		this.LabelPlotType = new global::Gtk.Label();
 		this.LabelPlotType.Name = "LabelPlotType";
 		this.LabelPlotType.LabelProp = global::Mono.Unix.Catalog.GetString("<b>Plot type</b>");
 		this.LabelPlotType.UseMarkup = true;
 		this.LayoutPagePlot.Add(this.LabelPlotType);
-		global::Gtk.Fixed.FixedChild w82 = ((global::Gtk.Fixed.FixedChild)(this.LayoutPagePlot[this.LabelPlotType]));
-		w82.X = 430;
-		w82.Y = 20;
+		global::Gtk.Fixed.FixedChild w88 = ((global::Gtk.Fixed.FixedChild)(this.LayoutPagePlot[this.LabelPlotType]));
+		w88.X = 430;
+		w88.Y = 20;
 		// Container child LayoutPagePlot.Gtk.Fixed+FixedChild
 		this.PlotType = global::Gtk.ComboBox.NewText();
 		this.PlotType.WidthRequest = 240;
 		this.PlotType.Name = "PlotType";
 		this.LayoutPagePlot.Add(this.PlotType);
-		global::Gtk.Fixed.FixedChild w83 = ((global::Gtk.Fixed.FixedChild)(this.LayoutPagePlot[this.PlotType]));
-		w83.X = 430;
-		w83.Y = 50;
+		global::Gtk.Fixed.FixedChild w89 = ((global::Gtk.Fixed.FixedChild)(this.LayoutPagePlot[this.PlotType]));
+		w89.X = 430;
+		w89.Y = 50;
 		// Container child LayoutPagePlot.Gtk.Fixed+FixedChild
 		this.LabelX = new global::Gtk.Label();
 		this.LabelX.Name = "LabelX";
 		this.LabelX.LabelProp = global::Mono.Unix.Catalog.GetString("<b>X</b>");
 		this.LabelX.UseMarkup = true;
 		this.LayoutPagePlot.Add(this.LabelX);
-		global::Gtk.Fixed.FixedChild w84 = ((global::Gtk.Fixed.FixedChild)(this.LayoutPagePlot[this.LabelX]));
-		w84.X = 430;
-		w84.Y = 90;
+		global::Gtk.Fixed.FixedChild w90 = ((global::Gtk.Fixed.FixedChild)(this.LayoutPagePlot[this.LabelX]));
+		w90.X = 430;
+		w90.Y = 90;
 		// Container child LayoutPagePlot.Gtk.Fixed+FixedChild
 		this.Feature1 = new global::Gtk.SpinButton(0D, 100D, 1D);
 		this.Feature1.WidthRequest = 100;
@@ -993,18 +1043,18 @@ public partial class MainWindow
 		this.Feature1.ClimbRate = 1D;
 		this.Feature1.Numeric = true;
 		this.LayoutPagePlot.Add(this.Feature1);
-		global::Gtk.Fixed.FixedChild w85 = ((global::Gtk.Fixed.FixedChild)(this.LayoutPagePlot[this.Feature1]));
-		w85.X = 430;
-		w85.Y = 110;
+		global::Gtk.Fixed.FixedChild w91 = ((global::Gtk.Fixed.FixedChild)(this.LayoutPagePlot[this.Feature1]));
+		w91.X = 430;
+		w91.Y = 110;
 		// Container child LayoutPagePlot.Gtk.Fixed+FixedChild
 		this.LabelY = new global::Gtk.Label();
 		this.LabelY.Name = "LabelY";
 		this.LabelY.LabelProp = global::Mono.Unix.Catalog.GetString("<b>Y</b>");
 		this.LabelY.UseMarkup = true;
 		this.LayoutPagePlot.Add(this.LabelY);
-		global::Gtk.Fixed.FixedChild w86 = ((global::Gtk.Fixed.FixedChild)(this.LayoutPagePlot[this.LabelY]));
-		w86.X = 570;
-		w86.Y = 90;
+		global::Gtk.Fixed.FixedChild w92 = ((global::Gtk.Fixed.FixedChild)(this.LayoutPagePlot[this.LabelY]));
+		w92.X = 570;
+		w92.Y = 90;
 		// Container child LayoutPagePlot.Gtk.Fixed+FixedChild
 		this.Feature2 = new global::Gtk.SpinButton(0D, 100D, 1D);
 		this.Feature2.WidthRequest = 100;
@@ -1015,9 +1065,9 @@ public partial class MainWindow
 		this.Feature2.Numeric = true;
 		this.Feature2.Value = 1D;
 		this.LayoutPagePlot.Add(this.Feature2);
-		global::Gtk.Fixed.FixedChild w87 = ((global::Gtk.Fixed.FixedChild)(this.LayoutPagePlot[this.Feature2]));
-		w87.X = 570;
-		w87.Y = 110;
+		global::Gtk.Fixed.FixedChild w93 = ((global::Gtk.Fixed.FixedChild)(this.LayoutPagePlot[this.Feature2]));
+		w93.X = 570;
+		w93.Y = 110;
 		// Container child LayoutPagePlot.Gtk.Fixed+FixedChild
 		this.UIManager.AddUiFromString("<ui><toolbar name=\'PlotToolbar\'><toolitem name=\'PlotButton\' action=\'PlotButton\'/>" +
 				"<toolitem name=\'SavePlotButton\' action=\'SavePlotButton\'/></toolbar></ui>");
@@ -1026,12 +1076,12 @@ public partial class MainWindow
 		this.PlotToolbar.ShowArrow = false;
 		this.PlotToolbar.ToolbarStyle = ((global::Gtk.ToolbarStyle)(0));
 		this.LayoutPagePlot.Add(this.PlotToolbar);
-		global::Gtk.Fixed.FixedChild w88 = ((global::Gtk.Fixed.FixedChild)(this.LayoutPagePlot[this.PlotToolbar]));
-		w88.X = 430;
-		w88.Y = 150;
+		global::Gtk.Fixed.FixedChild w94 = ((global::Gtk.Fixed.FixedChild)(this.LayoutPagePlot[this.PlotToolbar]));
+		w94.X = 430;
+		w94.Y = 150;
 		this.MainNotebook.Add(this.LayoutPagePlot);
-		global::Gtk.Notebook.NotebookChild w89 = ((global::Gtk.Notebook.NotebookChild)(this.MainNotebook[this.LayoutPagePlot]));
-		w89.Position = 3;
+		global::Gtk.Notebook.NotebookChild w95 = ((global::Gtk.Notebook.NotebookChild)(this.MainNotebook[this.LayoutPagePlot]));
+		w95.Position = 3;
 		// Notebook tab
 		this.LabelPagePlot = new global::Gtk.Label();
 		this.LabelPagePlot.Name = "LabelPagePlot";
@@ -1047,9 +1097,9 @@ public partial class MainWindow
 		this.ANNArchitecture.Name = "ANNArchitecture";
 		this.ANNArchitecture.Pixbuf = global::Gdk.Pixbuf.LoadFromResource("NeuralNetworkClassifier.ann.png");
 		this.LayoutPageAbout.Add(this.ANNArchitecture);
-		global::Gtk.Fixed.FixedChild w90 = ((global::Gtk.Fixed.FixedChild)(this.LayoutPageAbout[this.ANNArchitecture]));
-		w90.X = 20;
-		w90.Y = 20;
+		global::Gtk.Fixed.FixedChild w96 = ((global::Gtk.Fixed.FixedChild)(this.LayoutPageAbout[this.ANNArchitecture]));
+		w96.X = 20;
+		w96.Y = 20;
 		// Container child LayoutPageAbout.Gtk.Fixed+FixedChild
 		this.CreditsWindow = new global::Gtk.ScrolledWindow();
 		this.CreditsWindow.WidthRequest = 220;
@@ -1068,27 +1118,27 @@ C# implementation by Peter Sergio Larsen with minor modifications by Stephen Dae
 		this.Credits.WrapMode = ((global::Gtk.WrapMode)(2));
 		this.CreditsWindow.Add(this.Credits);
 		this.LayoutPageAbout.Add(this.CreditsWindow);
-		global::Gtk.Fixed.FixedChild w92 = ((global::Gtk.Fixed.FixedChild)(this.LayoutPageAbout[this.CreditsWindow]));
-		w92.X = 480;
-		w92.Y = 280;
+		global::Gtk.Fixed.FixedChild w98 = ((global::Gtk.Fixed.FixedChild)(this.LayoutPageAbout[this.CreditsWindow]));
+		w98.X = 480;
+		w98.Y = 280;
 		// Container child LayoutPageAbout.Gtk.Fixed+FixedChild
 		this.LabelCredits = new global::Gtk.Label();
 		this.LabelCredits.Name = "LabelCredits";
 		this.LabelCredits.LabelProp = global::Mono.Unix.Catalog.GetString("<b>Credits</b>");
 		this.LabelCredits.UseMarkup = true;
 		this.LayoutPageAbout.Add(this.LabelCredits);
-		global::Gtk.Fixed.FixedChild w93 = ((global::Gtk.Fixed.FixedChild)(this.LayoutPageAbout[this.LabelCredits]));
-		w93.X = 480;
-		w93.Y = 250;
+		global::Gtk.Fixed.FixedChild w99 = ((global::Gtk.Fixed.FixedChild)(this.LayoutPageAbout[this.LabelCredits]));
+		w99.X = 480;
+		w99.Y = 250;
 		// Container child LayoutPageAbout.Gtk.Fixed+FixedChild
 		this.LabelAbout = new global::Gtk.Label();
 		this.LabelAbout.Name = "LabelAbout";
 		this.LabelAbout.LabelProp = global::Mono.Unix.Catalog.GetString("<b>Neural Network Classifier</b>");
 		this.LabelAbout.UseMarkup = true;
 		this.LayoutPageAbout.Add(this.LabelAbout);
-		global::Gtk.Fixed.FixedChild w94 = ((global::Gtk.Fixed.FixedChild)(this.LayoutPageAbout[this.LabelAbout]));
-		w94.X = 480;
-		w94.Y = 20;
+		global::Gtk.Fixed.FixedChild w100 = ((global::Gtk.Fixed.FixedChild)(this.LayoutPageAbout[this.LabelAbout]));
+		w100.X = 480;
+		w100.Y = 20;
 		// Container child LayoutPageAbout.Gtk.Fixed+FixedChild
 		this.AboutWindow = new global::Gtk.ScrolledWindow();
 		this.AboutWindow.WidthRequest = 220;
@@ -1115,12 +1165,12 @@ http://cs.joensuu.fi/sipu/datasets/");
 		this.textview2.WrapMode = ((global::Gtk.WrapMode)(2));
 		this.AboutWindow.Add(this.textview2);
 		this.LayoutPageAbout.Add(this.AboutWindow);
-		global::Gtk.Fixed.FixedChild w96 = ((global::Gtk.Fixed.FixedChild)(this.LayoutPageAbout[this.AboutWindow]));
-		w96.X = 480;
-		w96.Y = 50;
+		global::Gtk.Fixed.FixedChild w102 = ((global::Gtk.Fixed.FixedChild)(this.LayoutPageAbout[this.AboutWindow]));
+		w102.X = 480;
+		w102.Y = 50;
 		this.MainNotebook.Add(this.LayoutPageAbout);
-		global::Gtk.Notebook.NotebookChild w97 = ((global::Gtk.Notebook.NotebookChild)(this.MainNotebook[this.LayoutPageAbout]));
-		w97.Position = 4;
+		global::Gtk.Notebook.NotebookChild w103 = ((global::Gtk.Notebook.NotebookChild)(this.MainNotebook[this.LayoutPageAbout]));
+		w103.Position = 4;
 		// Notebook tab
 		this.LabelPageAbout = new global::Gtk.Label();
 		this.LabelPageAbout.Name = "LabelPageAbout";
@@ -1128,9 +1178,9 @@ http://cs.joensuu.fi/sipu/datasets/");
 		this.MainNotebook.SetTabLabel(this.LayoutPageAbout, this.LabelPageAbout);
 		this.LabelPageAbout.ShowAll();
 		this.MainLayout.Add(this.MainNotebook);
-		global::Gtk.Fixed.FixedChild w98 = ((global::Gtk.Fixed.FixedChild)(this.MainLayout[this.MainNotebook]));
-		w98.X = 40;
-		w98.Y = 70;
+		global::Gtk.Fixed.FixedChild w104 = ((global::Gtk.Fixed.FixedChild)(this.MainLayout[this.MainNotebook]));
+		w104.X = 40;
+		w104.Y = 70;
 		this.Add(this.MainLayout);
 		if ((this.Child != null))
 		{
@@ -1158,5 +1208,7 @@ http://cs.joensuu.fi/sipu/datasets/");
 		this.SaveWKJButton.Clicked += new global::System.EventHandler(this.OnSaveWKJButtonClicked);
 		this.OpenNormalization.Clicked += new global::System.EventHandler(this.OnOpenNormalizationClicked);
 		this.SaveNormalization.Clicked += new global::System.EventHandler(this.OnSaveNormalizationClicked);
+		this.OpenNetworkButton.Clicked += new global::System.EventHandler(this.OnOpenNetworkButtonClicked);
+		this.SaveNetworkButton.Clicked += new global::System.EventHandler(this.OnSaveNetworkButtonClicked);
 	}
 }

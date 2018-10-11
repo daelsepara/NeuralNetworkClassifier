@@ -12,7 +12,7 @@ public partial class MainWindow : Gtk.Window
 {
 	Dialog Confirm;
 
-	FileChooserDialog TextSaver, TextLoader, ImageSaver;
+	FileChooserDialog TextSaver, TextLoader, JsonLoader, JsonSaver, ImageSaver;
 	String TrainingSetFileName, TestSetFileName;
 	String WJIFileName, WKJFileName, NormalizationFileName;
 
@@ -34,7 +34,7 @@ public partial class MainWindow : Gtk.Window
 	ManagedArray TestData = new ManagedArray();
 	ManagedArray NormalizationData = new ManagedArray();
 
-	string FileName;
+	string FileName, FileNetwork;
 
 	CultureInfo ci = new CultureInfo("en-us");
 
@@ -117,6 +117,22 @@ public partial class MainWindow : Gtk.Window
 			"Load", ResponseType.Accept
 		);
 
+		JsonLoader = new FileChooserDialog(
+			"Load trained models",
+			this,
+			FileChooserAction.Open,
+			"Cancel", ResponseType.Cancel,
+			"Load", ResponseType.Accept
+		);
+
+		JsonSaver = new FileChooserDialog(
+			"Save trained models",
+			this,
+			FileChooserAction.Save,
+			"Cancel", ResponseType.Cancel,
+			"Save", ResponseType.Accept
+		);
+
 		ImageSaver = new FileChooserDialog(
 			"Save Filtered Image",
 			this,
@@ -126,8 +142,14 @@ public partial class MainWindow : Gtk.Window
 		);
 
 		TextLoader.AddFilter(AddFilter("Text files (csv/txt)", "*.txt", "*.csv"));
+		TextLoader.Filter = TextLoader.Filters[0];
+
 		TextSaver.AddFilter(AddFilter("txt", "*.txt"));
 		TextSaver.AddFilter(AddFilter("csv", "*.csv"));
+		TextSaver.Filter = TextSaver.Filters[0];
+
+		JsonLoader.AddFilter(AddFilter("json", "*.json"));
+		JsonSaver.AddFilter(AddFilter("json", "*.json"));
 
 		Delimiters.Add(new Delimiter("Tab \\t", '\t'));
 		Delimiters.Add(new Delimiter("Comma ,", ','));
@@ -195,6 +217,10 @@ public partial class MainWindow : Gtk.Window
 		SaveWKJButton.Sensitive = toggle;
 		OpenNormalization.Sensitive = toggle;
 		SaveNormalization.Sensitive = toggle;
+
+		OpenNetworkButton.Sensitive = toggle;
+		SaveNetworkButton.Sensitive = toggle;
+		NetworkFile.Sensitive = toggle;
 
 		LoadNetworkButton.Sensitive = toggle;
 
@@ -453,6 +479,94 @@ public partial class MainWindow : Gtk.Window
 		}
 
 		TextSaver.Hide();
+	}
+
+	protected void LoadJson(ref string FileName, string title, Entry entry)
+	{
+		JsonLoader.Title = title;
+
+		// Add most recent directory
+		if (!string.IsNullOrEmpty(JsonLoader.Filename))
+		{
+			var directory = System.IO.Path.GetDirectoryName(JsonLoader.Filename);
+
+			if (Directory.Exists(directory))
+			{
+				JsonLoader.SetCurrentFolder(directory);
+			}
+		}
+
+		if (JsonLoader.Run() == (int)ResponseType.Accept)
+		{
+			if (!string.IsNullOrEmpty(JsonLoader.Filename))
+			{
+				FileName = JsonLoader.Filename;
+
+				if (entry != null)
+				{
+					entry.Text = FileName;
+				}
+			}
+		}
+
+		JsonLoader.Hide();
+	}
+
+	protected void SaveJson(ref string FileName, string title, Entry entry, string data)
+	{
+		JsonSaver.Title = title;
+
+		JsonSaver.SelectFilename(FileName);
+
+		string directory;
+
+		// Add most recent directory
+		if (!string.IsNullOrEmpty(JsonSaver.Filename))
+		{
+			directory = System.IO.Path.GetDirectoryName(JsonSaver.Filename);
+
+			if (Directory.Exists(directory))
+			{
+				JsonSaver.SetCurrentFolder(directory);
+			}
+		}
+
+		if (JsonSaver.Run() == (int)ResponseType.Accept)
+		{
+			if (!string.IsNullOrEmpty(JsonSaver.Filename))
+			{
+				FileName = JsonSaver.Filename;
+
+				directory = GetDirectory(FileName);
+
+				var ext = JsonSaver.Filter.Name;
+
+				FileName = String.Format("{0}.{1}", GetBaseFileName(FileName), ext);
+
+				if (!string.IsNullOrEmpty(data))
+				{
+					var fullpath = String.Format("{0}/{1}", directory, FileName);
+
+					try
+					{
+						using (var file = new StreamWriter(fullpath, false))
+						{
+							file.Write(data);
+						}
+
+						FileName = fullpath;
+
+						entry.Text = FileName;
+					}
+					catch (Exception ex)
+					{
+						Console.WriteLine("Error saving {0}: {1}", FileName, ex.Message);
+					}
+				}
+			}
+		}
+
+		JsonSaver.Hide();
 	}
 
 	protected string GetFileName(string fullpath)
@@ -1511,5 +1625,51 @@ public partial class MainWindow : Gtk.Window
 			return;
 
 		SavePlot();
+	}
+
+	protected void OnOpenNetworkButtonClicked(object sender, EventArgs e)
+	{
+		if (!Paused)
+			return;
+
+		LoadJson(ref FileNetwork, "Load network model", NetworkFile);
+
+		var json = Utility.LoadJson(FileNetwork);
+
+		if (!string.IsNullOrEmpty(json))
+		{
+			var network = Utility.Deserialize(json, NormalizationData);
+
+			if (network != null && network.Wji != null && network.Wkj != null)
+			{
+				if (network.Wji.x > 0)
+					InputLayerNodes.Value = network.Wji.x - 1;
+
+				if (network.Wji.y > 0)
+					HiddenLayerNodes.Value = network.Wji.y;
+
+				if (network.Wkj.y > 0)
+					Categories.Value = network.Wkj.y;
+
+				UpdateTextView(WJIView, network.Wji);
+				UpdateTextView(WKJView, network.Wkj);
+				UpdateTextView(Normalization, NormalizationData);
+			}
+
+			network.Free();
+		}
+	}
+
+	protected void OnSaveNetworkButtonClicked(object sender, EventArgs e)
+	{
+		if (!Paused)
+			return;
+
+		if (NetworkSetuped)
+		{
+			var json = Utility.Serialize(Network, NormalizationData);
+
+			SaveJson(ref FileNetwork, "Save network model", NetworkFile, json);
+		}
 	}
 }
