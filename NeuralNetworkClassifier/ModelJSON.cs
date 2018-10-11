@@ -184,25 +184,28 @@ public static class Utility
 
 		var network = new ManagedNN();
 
-		network.Wji = Set(model.Wji);
-		network.Wkj = Set(model.Wkj);
-
-		if (model.Normalization != null)
+		if (model.Wji != null && model.Wkj != null)
 		{
-			var temp = Set(model.Normalization);
+			network.Wji = Set(model.Wji);
+			network.Wkj = Set(model.Wkj);
 
-			if (normalization == null)
+			if (model.Normalization != null)
 			{
-				normalization = new ManagedArray(temp);
-			}
-			else
-			{
-				normalization.Resize(temp);
-			}
+				var temp = Set(model.Normalization);
 
-			ManagedOps.Copy2D(normalization, temp, 0, 0);
+				if (normalization == null)
+				{
+					normalization = new ManagedArray(temp);
+				}
+				else
+				{
+					normalization.Resize(temp);
+				}
 
-			ManagedOps.Free(temp);
+				ManagedOps.Copy2D(normalization, temp, 0, 0);
+
+				ManagedOps.Free(temp);
+			}
 		}
 
 		return network;
@@ -212,11 +215,13 @@ public static class Utility
 	{
 		var model = JsonConvert.DeserializeObject<ModelJSON>(json);
 
-		var network = new ManagedNN
-		{
-			Wji = Set(model.Wji),
-			Wkj = Set(model.Wkj)
-		};
+		var network = new ManagedNN();
+
+        if (model.Wji != null && model.Wkj != null)
+        {
+            network.Wji = Set(model.Wji);
+            network.Wkj = Set(model.Wkj);
+        }
 
 		return network;
 	}
