@@ -182,11 +182,10 @@ public static class Utility
 	{
 		var model = JsonConvert.DeserializeObject<ModelJSON>(json);
 
-		var network = new ManagedNN
-		{
-			Wji = Set(model.Wji),
-			Wkj = Set(model.Wkj)
-		};
+		var network = new ManagedNN();
+
+		network.Wji = Set(model.Wji);
+		network.Wkj = Set(model.Wkj);
 
 		if (model.Normalization != null)
 		{
