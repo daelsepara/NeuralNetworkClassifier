@@ -91,7 +91,7 @@ namespace DeepLearnCS
 			ManagedMatrix.Multiply(D2, D3, sWkj);
 
 			var DZ2 = ManagedMatrix.DSigm(Z2);
-			ManagedMatrix.Multiply(D2, DZ2);
+			ManagedMatrix.Product(D2, DZ2);
 
 			// dWji = (t(d2) %*% x)
 			// dWkj = (t(d3) % *% a_2)
