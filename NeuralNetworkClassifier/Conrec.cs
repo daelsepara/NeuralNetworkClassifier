@@ -56,10 +56,10 @@ namespace OxyPlot
         /// <param name="renderer">The renderer.</param>
         public static void Contour(double[,] d, double[] x, double[] y, double[] z, RendererDelegate renderer)
         {
-            double x1 = 0.0;
-            double x2 = 0.0;
-            double y1 = 0.0;
-            double y2 = 0.0;
+            double x1 = 0;
+            double x2 = 0;
+            double y1 = 0;
+            double y2 = 0;
 
             var h = new double[5];
             var sh = new int[5];
@@ -121,16 +121,16 @@ namespace OxyPlot
                                     }
                                     else
                                     {
-                                        h[0] = 0.25 * (h[1] + h[2] + h[3] + h[4]);
-                                        xh[0] = 0.5 * (x[i] + x[i + 1]);
-                                        yh[0] = 0.5 * (y[j] + y[j + 1]);
+                                        h[0] = (double)1 / 4 * (h[1] + h[2] + h[3] + h[4]);
+										xh[0] = (double)1 / 2 * (x[i] + x[i + 1]);
+										yh[0] = (double)1 / 2 * (y[j] + y[j + 1]);
                                     }
 
-                                    if (h[m] > 0.0)
+                                    if (h[m] > 0)
                                     {
                                         sh[m] = 1;
                                     }
-                                    else if (h[m] < 0.0)
+                                    else if (h[m] < 0)
                                     {
                                         sh[m] = -1;
                                     }

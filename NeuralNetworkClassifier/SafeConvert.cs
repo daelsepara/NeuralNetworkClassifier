@@ -35,7 +35,7 @@ public static class SafeConvert
         {
             Console.WriteLine("Unable to convert {0} to double: {1}", src, ex.Message);
 
-            result = 0.0;
+            result = 0;
         }
 
         return result;

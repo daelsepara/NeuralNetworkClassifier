@@ -913,13 +913,13 @@ public partial class MainWindow : Gtk.Window
         // Reset Network
         Network.Free();
 
-        Options.Alpha = Convert.ToDouble(LearningRate.Value, ci) * 1.0e-2;
+        Options.Alpha = Convert.ToDouble(LearningRate.Value, ci) / 100;
         Options.Epochs = Convert.ToInt32(Epochs.Value, ci);
         Options.Inputs = Convert.ToInt32(InputLayerNodes.Value, ci);
         Options.Categories = Convert.ToInt32(Categories.Value, ci);
         Options.Items = InputData.y;
         Options.Nodes = Convert.ToInt32(HiddenLayerNodes.Value, ci);
-        Options.Tolerance = Convert.ToDouble(Tolerance.Value, ci) * 1.0e-5;
+        Options.Tolerance = Convert.ToDouble(Tolerance.Value, ci) / 100000;
 
         if (UseOptimizer.Active)
         {
@@ -1097,13 +1097,13 @@ public partial class MainWindow : Gtk.Window
         // Reset Network
         Network.Free();
 
-        Options.Alpha = Convert.ToDouble(LearningRate.Value, ci) / 1.0e2;
+        Options.Alpha = Convert.ToDouble(LearningRate.Value, ci) / 100;
         Options.Epochs = Convert.ToInt32(Epochs.Value, ci);
         Options.Inputs = Convert.ToInt32(InputLayerNodes.Value, ci);
         Options.Categories = Convert.ToInt32(Categories.Value, ci);
         Options.Items = InputData.y;
         Options.Nodes = Convert.ToInt32(HiddenLayerNodes.Value, ci);
-        Options.Tolerance = Convert.ToDouble(Tolerance.Value, ci) / 1.0e5;
+        Options.Tolerance = Convert.ToDouble(Tolerance.Value, ci) / 100000;
 
         NetworkSetuped = SetupInputLayerWeights(inputLayer) && SetupHiddenLayerWeights(hiddenLayer) && SetupNormalization(normalization);
 

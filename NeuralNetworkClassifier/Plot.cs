@@ -30,7 +30,7 @@ public static class Plot
         {
             for (var i = 0; i < Rows(x); i++)
             {
-                if (Math.Abs(deltax) > 0.0 && Math.Abs(deltay) > 0.0)
+                if (Math.Abs(deltax) > 0 && Math.Abs(deltay) > 0)
                 {
                     var xp = (int)((x[f1, i] - minx) / deltax);
                     var yp = (int)((x[f2, i] - miny) / deltay);
@@ -135,7 +135,7 @@ public static class Plot
     {
         if (ContourGraph != null)
         {
-            if (Math.Abs(deltax) > 0.0 && Math.Abs(deltay) > 0.0)
+            if (Math.Abs(deltax) > 0 && Math.Abs(deltay) > 0)
             {
                 var xs = (int)((x1 - minx) / deltax);
                 var ys = (int)((y1 - miny) / deltay);
@@ -220,7 +220,7 @@ public static class Plot
             ManagedOps.Free(p);
         }
 
-        var z = new double[] { 0.6, 0.8, 1.0 };
+        var z = new double[] { (double)6 / 10, (double)8 / 10, 1 };
 
         Conrec.Contour(data, xplot, yplot, z, ContourLine);
 
