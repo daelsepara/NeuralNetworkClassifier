@@ -88,4 +88,7 @@
     <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup Condition = " '$(OS)' == 'Unix' ">
+	  <CscToolExe>mcs</CscToolExe>
+  </PropertyGroup>
 </Project>

@@ -45,9 +45,6 @@ public static class Plot
     {
         var m = Rows(x);
 
-        var xplot = new double[width];
-        var yplot = new double[height];
-
         minx = Double.MaxValue;
         maxx = Double.MinValue;
 
@@ -220,7 +217,7 @@ public static class Plot
             ManagedOps.Free(p);
         }
 
-        var z = new double[] { (double)6 / 10, (double)8 / 10, 1 };
+        var z = new double[] { 0.6, 0.8, 1 };
 
         Conrec.Contour(data, xplot, yplot, z, ContourLine);
 

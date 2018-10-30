@@ -75,7 +75,6 @@ public static class Common
 
     public static Color I2C(uint color)
     {
-        byte a = (byte)(color >> 24);
         byte r = (byte)(color >> 16);
         byte g = (byte)(color >> 8);
         byte b = (byte)(color >> 0);

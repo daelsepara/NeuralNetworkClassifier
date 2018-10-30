@@ -150,7 +150,7 @@ namespace DeepLearnCS
         {
             for (int x = 0; x < rand.Length(); x++)
             {
-                rand[x] = (random.NextDouble() - (double)1 / 2) * 2;
+                rand[x] = (random.NextDouble() - 0.5) * 2;
             }
         }
 
@@ -215,7 +215,7 @@ namespace DeepLearnCS
             return prediction;
         }
 
-        public ManagedIntList Classify(ManagedArray test, NeuralNetworkOptions opts, double threshold = (double)1 / 2)
+        public ManagedIntList Classify(ManagedArray test, NeuralNetworkOptions opts, double threshold = 0.5)
         {
             Forward(test);
 

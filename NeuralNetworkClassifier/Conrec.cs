@@ -121,9 +121,9 @@ namespace OxyPlot
                                     }
                                     else
                                     {
-                                        h[0] = (double)1 / 4 * (h[1] + h[2] + h[3] + h[4]);
-                                        xh[0] = (double)1 / 2 * (x[i] + x[i + 1]);
-                                        yh[0] = (double)1 / 2 * (y[j] + y[j + 1]);
+                                        h[0] = 0.25 * (h[1] + h[2] + h[3] + h[4]);
+                                        xh[0] = 0.5 * (x[i] + x[i + 1]);
+                                        yh[0] = 0.5 * (y[j] + y[j + 1]);
                                     }
 
                                     if (h[m] > 0)
