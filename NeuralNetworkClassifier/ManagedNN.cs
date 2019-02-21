@@ -112,7 +112,7 @@ namespace DeepLearnCS
 
             for (var i = 0; i < Y_output.Length(); i++)
             {
-                L2 += (D3[i] * D3[i]);
+                L2 += 0.5 * (D3[i] * D3[i]);
                 Cost += (-Y_output[i] * Math.Log(Yk[i]) - (1 - Y_output[i]) * Math.Log(1 - Yk[i]));
             }
 
@@ -133,6 +133,12 @@ namespace DeepLearnCS
             ManagedOps.Free(A2, Yk, Z2);
         }
 
+        public void ClearDeltas()
+        {
+            // cleanup of arrays allocated in BackPropagation
+            ManagedOps.Free(DeltaWji, DeltaWkj);
+        }
+
         public void ApplyGradients(NeuralNetworkOptions opts)
         {
             // dWji = learning_rate * dWji
@@ -141,9 +147,6 @@ namespace DeepLearnCS
             // w_kj = w_kj - dWkj
             ManagedMatrix.Add(Wkj, DeltaWkj, -opts.Alpha);
             ManagedMatrix.Add(Wji, DeltaWji, -opts.Alpha);
-
-            // cleanup of arrays allocated in BackPropagation
-            ManagedOps.Free(DeltaWji, DeltaWkj);
         }
 
         public void Rand(ManagedArray rand, Random random)
@@ -286,11 +289,19 @@ namespace DeepLearnCS
         {
             Forward(input);
             BackPropagation(input);
-            ApplyGradients(opts);
+
+            var optimized = (double.IsNaN(Cost) || Cost < opts.Tolerance);
+
+            if (!optimized)
+            {
+                ApplyGradients(opts);
+            }
+
+            ClearDeltas();
 
             Iterations = Iterations + 1;
 
-            return (double.IsNaN(Cost) || Iterations >= opts.Epochs || Cost < opts.Tolerance);
+            return (optimized || Iterations >= opts.Epochs);
         }
 
         public void Train(ManagedArray input, ManagedArray output, NeuralNetworkOptions opts)
@@ -378,8 +389,7 @@ namespace DeepLearnCS
 
             X = ReshapeWeights(DeltaWji, DeltaWkj);
 
-            // cleanup of arrays allocated in BackPropagation
-            ManagedOps.Free(DeltaWji, DeltaWkj);
+            ClearDeltas();
 
             return new FuncOutput(Cost, X);
         }
