@@ -921,6 +921,18 @@ public partial class MainWindow : Gtk.Window
         Options.Nodes = Convert.ToInt32(HiddenLayerNodes.Value, ci);
         Options.Tolerance = Convert.ToDouble(Tolerance.Value, ci) / 100000;
 
+        if (NormalizationData != null && NormalizationData.y > 1)
+        {
+            Network.Min = new double[NormalizationData.x];
+            Network.Max = new double[NormalizationData.x];
+
+            for (var i = 0; i < 2; i++)
+            {
+                Network.Min[i] = NormalizationData[i, 0];
+                Network.Max[i] = NormalizationData[i, 1];
+            }
+        }
+
         if (UseOptimizer.Active)
         {
             Network.SetupOptimizer(InputData, OutputData, Options, true);
@@ -1106,6 +1118,18 @@ public partial class MainWindow : Gtk.Window
         Options.Tolerance = Convert.ToDouble(Tolerance.Value, ci) / 100000;
 
         NetworkSetuped = SetupInputLayerWeights(inputLayer) && SetupHiddenLayerWeights(hiddenLayer) && SetupNormalization(normalization);
+
+        if (NormalizationData != null && NormalizationData.y > 1)
+        {
+            Network.Min = new double[NormalizationData.x];
+            Network.Max = new double[NormalizationData.x];
+
+            for (var i = 0; i < 2; i++)
+            {
+                Network.Min[i] = NormalizationData[i, 0];
+                Network.Max[i] = NormalizationData[i, 1];
+            }
+        }
 
         NetworkLoaded = NetworkSetuped;
 
@@ -1635,29 +1659,32 @@ public partial class MainWindow : Gtk.Window
 
         LoadJson(ref FileNetwork, "Load network model", NetworkFile);
 
-        var json = Utility.LoadJson(FileNetwork);
-
-        if (!string.IsNullOrEmpty(json))
+        if (string.IsNullOrEmpty(FileNetwork))
         {
-            var network = Utility.Deserialize(json, NormalizationData);
+            var json = Utility.LoadJson(FileNetwork);
 
-            if (network != null && network.Wji != null && network.Wkj != null)
+            if (!string.IsNullOrEmpty(json))
             {
-                if (network.Wji.x > 0)
-                    InputLayerNodes.Value = network.Wji.x - 1;
+                var network = Utility.Deserialize(json, NormalizationData);
 
-                if (network.Wji.y > 0)
-                    HiddenLayerNodes.Value = network.Wji.y;
+                if (network != null && network.Wji != null && network.Wkj != null)
+                {
+                    if (network.Wji.x > 0)
+                        InputLayerNodes.Value = network.Wji.x - 1;
 
-                if (network.Wkj.y > 0)
-                    Categories.Value = network.Wkj.y;
+                    if (network.Wji.y > 0)
+                        HiddenLayerNodes.Value = network.Wji.y;
 
-                UpdateTextView(WJIView, network.Wji);
-                UpdateTextView(WKJView, network.Wkj);
-                UpdateTextView(Normalization, NormalizationData);
+                    if (network.Wkj.y > 0)
+                        Categories.Value = network.Wkj.y;
+
+                    UpdateTextView(WJIView, network.Wji);
+                    UpdateTextView(WKJView, network.Wkj);
+                    UpdateTextView(Normalization, NormalizationData);
+                }
+
+                network.Free();
             }
-
-            network.Free();
         }
     }
 
@@ -1668,7 +1695,7 @@ public partial class MainWindow : Gtk.Window
 
         if (NetworkSetuped)
         {
-            var json = Utility.Serialize(Network, NormalizationData);
+            var json = Utility.Serialize(Network);
 
             SaveJson(ref FileNetwork, "Save network model", NetworkFile, json);
         }

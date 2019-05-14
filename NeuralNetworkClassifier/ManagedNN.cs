@@ -15,6 +15,9 @@ namespace DeepLearnCS
         public ManagedArray DeltaWkj;
         public ManagedArray Y_output;
 
+        public double[] Min;
+        public double[] Max;
+
         // Error
         public double Cost;
         public double L2;
@@ -283,6 +286,77 @@ namespace DeepLearnCS
             L2 = 1.0;
 
             Iterations = 0;
+        }
+
+        public ManagedArray Normalize(ManagedArray input)
+        {
+            Min = new double[input.x];
+            Max = new double[input.x];
+
+            var result = new ManagedArray(input, false);
+
+            for (int i = 0; i < input.x; i++)
+            {
+                Max[i] = double.MinValue;
+                Min[i] = double.MaxValue;
+            }
+
+            for (int y = 0; y < input.y; y++)
+            {
+                for (int x = 0; x < input.x; x++)
+                {
+                    var val = input[x, y];
+
+                    Max[x] = Math.Max(Max[x], val);
+                    Min[x] = Math.Min(Min[x], val);
+                }
+            }
+
+            for (int y = 0; y < input.y; y++)
+            {
+                for (int x = 0; x < input.x; x++)
+                {
+                    var val = input[x, y];
+
+                    var denum = Max[x] - Min[x];
+
+                    result[x, y] = (val - Min[x]) / denum;
+                }
+            }
+
+            return result;
+        }
+
+        public ManagedArray ApplyNormalization(ManagedArray input)
+        {
+            var result = new ManagedArray(input, false);
+
+            if (Min.GetLength(0) > 0 && Max.GetLength(0) > 0)
+            {
+                for (int y = 0; y < input.y; y++)
+                {
+                    for (int x = 0; x < input.x; x++)
+                    {
+                        var val = input[x, y];
+
+                        var denum = Max[x] - Min[x];
+
+                        result[x, y] = (val - Min[x]) / denum;
+                    }
+                }
+            }
+            else
+            {
+                for (int y = 0; y < input.y; y++)
+                {
+                    for (int x = 0; x < input.x; x++)
+                    {
+                        result[x, y] = input[x, y];
+                    }
+                }
+            }
+
+            return result;
         }
 
         public bool Step(ManagedArray input, NeuralNetworkOptions opts)
